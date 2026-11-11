@@ -2,6 +2,7 @@
   "name": "tasar-m-i-in-kodlar",
   "private": true,
   "dependencies": {
-    "gsap": "^3.15.1"
+    "gsap": "^3.15.1",
+    "omniroute": "^3.8.53"
   }
 }
