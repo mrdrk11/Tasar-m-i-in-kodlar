@@ -181,6 +181,7 @@ function sahne() {
     const W = kat.clientWidth, H = kat.clientHeight;
     if (!W || !H) return;
     const genis = W >= 900;
+    const yatay = !genis && H <= 520;
     if (genis && slot.offsetWidth) {
       // The slot is as tall as a capital letter; the döner is 1.25em tall and
       // dips 0.22em below the baseline (same numbers as the CSS placeholder).
@@ -192,15 +193,18 @@ function sahne() {
       yuva.y = (y + h + dip - full) / H; yuva.h = full / H;
     } else {
       // Phones: right-hand column under the name, down to just above the hint.
+      // Held sideways there is no room under the name, so it stands beside it.
+      // The spit's tip rises about 9% above the box; leave it that much air.
       const ad = $('.kilit', kat);
-      const top = ofset(ad).y + ad.offsetHeight + 10;
-      const bottom = H * 0.91;
-      const w = W * 0.42;
-      const h = Math.min(bottom - top, w / 0.5);
-      yuva.x = (W * 0.98 - w) / W; yuva.w = w / W;
+      const top = yatay ? H * 0.26 : ofset(ad).y + ad.offsetHeight + 10;
+      const bottom = H * (yatay ? 0.97 : 0.91);
+      const enCok = W * (yatay ? 0.3 : 0.42);
+      const h = Math.min((bottom - top) / 1.09, enCok / 0.5);
+      const w = yatay ? h * 0.5 : enCok;
+      yuva.x = (W * (yatay ? 0.94 : 0.98) - w) / W; yuva.w = w / W;
       yuva.y = (bottom - h) / H; yuva.h = h / H;
     }
-    Object.assign(sahneKutusu, genis ? { x: 0.43, y: 0.035, w: 0.57, h: 0.94 } : { x: 0, y: 0.31, w: 1, h: 0.62 });
+    Object.assign(sahneKutusu, genis || yatay ? { x: 0.43, y: 0.035, w: 0.57, h: 0.94 } : { x: -0.06, y: 0.33, w: 1, h: 0.6 });
   };
 
   const durum = { asama: 0, kesim: 0 };

@@ -202,9 +202,13 @@ html.hazir .sahne__giris > :nth-child(5) { animation-delay: 300ms; }
     align-items: center;
     column-gap: 40px;
   }
-  .kilit { font-size: min(calc((62vw - 2 * var(--kenar)) / 5.02), 24svh); }
-  .sahne__gl { grid-row: span 2; width: min(100%, 620px); }
+  /* Text takes the wide column, the döner the narrow one beside it. */
+  .sahne__giris { grid-column: 1; grid-row: 1; min-width: 0; }
+  .sahne__doner { grid-column: 1; grid-row: 2; }
+  .sahne__gl { grid-column: 2; grid-row: 1 / span 2; width: min(100%, 620px); }
+  .kilit { font-size: min(calc((min(100vw, 1320px) - 2 * var(--kenar) - 40px) * 0.625 / 5.1), 24svh); }
 }
+html.kaydir .sahne__giris, html.kaydir .sahne__doner, html.kaydir .sahne__gl { grid-column: auto; grid-row: auto; }
 
 /* ---- Scroll-driven stage ---- */
 html.kaydir .sahne { height: 360svh; }
@@ -251,6 +255,24 @@ html.kaydir .sahne__on-afis {
   object-fit: contain;
   transition: opacity 400ms ease;
 }
+/* Below desktop width the text keeps to the top and the döner to the bottom
+   right, so the two never meet on tall screens. */
+@media (max-width: 899px) {
+  html.kaydir .sahne__giris { justify-content: flex-start; padding-top: clamp(6px, 5svh, 56px); }
+  html.kaydir .sahne__on-afis { max-height: 56svh; }
+}
+/* Phones held sideways: one compact row of text beside the döner. */
+@media (max-width: 899px) and (max-height: 520px) {
+  html.kaydir .sahne__giris { padding-top: 0; justify-content: center; gap: 8px; bottom: 4svh; }
+  html.kaydir .kilit { font-size: min(calc((100vw - 2 * var(--kenar)) * 0.62 / 5.02), 26svh); }
+  html.kaydir .sahne__metin, html.kaydir .ipucu { display: none; }
+  html.kaydir .slogan { font-size: 1.25rem; }
+  html.kaydir .sahne__giris .dugmeler { flex-direction: row; width: auto; max-width: 62%; }
+  html.kaydir .sahne__giris .dugme { min-height: 44px; white-space: nowrap; }
+  html.kaydir .sahne__on-afis { right: 6%; bottom: 3svh; width: auto; height: 65svh; max-height: none; }
+  html.kaydir .sahne__doner .baski { display: none; }
+  html.kaydir .sahne__doner .baslik, html.kaydir .sahne__doner .govde { max-width: 44%; }
+}
 /* Once the canvas is live it draws the döner; the still images step aside. */
 html.kaydir .sahne__kat.canli .sahne__on-afis,
 html.kaydir .sahne__kat.canli .kilit__i img { opacity: 0; }
@@ -291,7 +313,7 @@ html.kaydir .sahne__doner {
   opacity: 0;
   visibility: hidden;
 }
-html.kaydir .sahne__doner .baski { --genislik: clamp(104px, 26vw, 150px); position: absolute; right: 0; top: 0; }
+html.kaydir .sahne__doner .baski { --genislik: clamp(84px, 22vw, 150px); position: absolute; right: 0; top: 0; }
 html.kaydir .sahne__doner .baslik { max-width: 62%; }
 html.kaydir .sahne__doner .govde { max-width: 60%; }
 html.kaydir .ipucu {
@@ -496,6 +518,7 @@ html.duruk .ipucu__nokta { animation-play-state: paused; }
   transition: opacity 500ms ease, transform 700ms var(--cikis);
 }
 .lezzet__dev span:nth-child(4) { font-size: min(19.5vw, 40svh); }
+@media (max-width: 760px) { .lezzet__dev span { top: 25%; } }
 .lezzet[data-secili='0'] .lezzet__dev span:nth-child(1),
 .lezzet[data-secili='1'] .lezzet__dev span:nth-child(2),
 .lezzet[data-secili='2'] .lezzet__dev span:nth-child(3),
@@ -880,3 +903,55 @@ html.kaydir .saat__ic {
   .cubuk__ana { background: var(--altin); color: var(--komur) !important; }
 }
 @media (prefers-reduced-motion: reduce) { .cubuk { transition: none; } }
+
+/* ----------------------------------------------------------------------- */
+/* Fit: short phones, phones held sideways, narrow laptops                  */
+/* ----------------------------------------------------------------------- */
+
+/* Dishes: the heading keeps clear of the plates and of the giant word. */
+@media (min-width: 900px) {
+  html.kaydir .lezzet__ust .baslik { font-size: clamp(1.7rem, 1rem + 2.2vw, 3rem); }
+  html.kaydir .lezzet__gl { top: 24svh; height: 54svh; }
+  .lezzet__dev span { top: 21%; }
+  .siparis__numara { font-size: min(9.2rem, calc((min(100vw, 1320px) - 2 * var(--kenar) - 72px) * 0.625 / 4.9)); }
+}
+
+/* Oven on phones: the scene takes whatever height the text leaves over, so
+   the two can never overlap however short the screen is. */
+@media (max-width: 899px) {
+  html.kaydir .firin__kat {
+    display: flex;
+    flex-direction: column;
+    padding: calc(var(--ust-yukseklik) + 1svh) 0 calc(var(--cubuk-yukseklik) + 3svh);
+  }
+  html.kaydir .firin__gl { position: relative; top: auto; flex: 1 1 0; min-height: 0; height: auto; }
+  html.kaydir .firin__ic { position: relative; bottom: auto; flex: none; }
+}
+@media (max-width: 899px) and (max-height: 700px) {
+  html.kaydir .sahne__doner .govde { display: none; }
+  html.kaydir .firin__baski { display: none; }
+  html.kaydir .firin__metin { padding-right: 0; }
+}
+
+/* Phones held sideways: text on the left half, the scene on the right. */
+@media (max-width: 899px) and (max-height: 520px) {
+  html.kaydir .lezzet__kat .baslik, html.kaydir .firin__kat .baslik, html.kaydir .saat__kat .baslik { font-size: clamp(1.6rem, 9svh, 2.3rem); }
+
+  html.kaydir .lezzet__ust .baslik { display: none; }
+  html.kaydir .lezzet__gl { top: 15svh; height: 62svh; left: 26%; }
+  html.kaydir .lezzet__ic { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); grid-template-rows: auto 1fr auto; column-gap: 20px; align-items: end; }
+  html.kaydir .lezzet__ust { grid-column: 1 / -1; }
+  html.kaydir .lezzet__panolar { grid-row: 3; grid-column: 1; }
+  html.kaydir .lezzet__sekmeler { grid-row: 3; grid-column: 2; }
+  html.kaydir .pano { min-height: 0; }
+  html.kaydir .pano h3 { font-size: 2rem; }
+  .lezzet__dev span { top: 20%; font-size: min(22vw, 44svh); }
+
+  html.kaydir .firin__kat { flex-direction: row-reverse; align-items: center; }
+  html.kaydir .firin__gl { align-self: stretch; flex: 1 1 0; }
+  html.kaydir .firin__ic { flex: 0 0 50%; max-width: 50%; }
+  html.kaydir .firin__metin { gap: 10px; }
+
+  html.kaydir .saat__gl { left: 42%; top: 24svh; height: 54svh; }
+  html.kaydir .saat__ic { top: var(--ust-yukseklik); bottom: var(--cubuk-yukseklik); right: 50%; align-content: center; gap: 10px; }
+}
