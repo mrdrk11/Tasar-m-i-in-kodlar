@@ -1,0 +1,35 @@
+# AI Design Skills — source and license
+
+The `landing-page-design` and `figma-designer` folders in this directory are
+unmodified copies of the skills from AI Design Skills.
+
+- Source: https://github.com/elayadesign/ai-design-skills (`skills/` folder)
+- Commit: `456d9e0d3e2d84c748bb143c6ca3d90c45e16213` (2026-11-02)
+
+`figma-designer` only does something in a session that has the Figma
+connector, and it expects Figma's own `figma-use` skills alongside it.
+
+To update, replace each folder's `SKILL.md` with the newer file from the
+source repository and change the commit above.
+
+## License (MIT)
+
+Copyright (c) 2026 Elaya
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
