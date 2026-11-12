@@ -96,7 +96,7 @@ export class SceneHost {
 
     this._near = new IntersectionObserver((entries) => {
       if (entries.some((e) => e.isIntersecting)) {
-        this._near.disconnect();
+        this._near.unobserve(this.el);
         this.start();
       }
     }, { rootMargin: this.rootMargin });
@@ -106,16 +106,53 @@ export class SceneHost {
       this._sync();
     }, { rootMargin: '5% 0px 5% 0px' });
 
+    // Far from the viewport the scene is torn down and its WebGL context
+    // released, so only the stages around the visitor hold GPU memory.
+    this._far = new IntersectionObserver((entries) => {
+      const near = entries[entries.length - 1].isIntersecting;
+      if (!near && this.started && !this.failed) this.sleep();
+    }, { rootMargin: '220% 0px 220% 0px' });
+
     if (opts.eager) this.start();
     else this._near.observe(el);
     this._onscreen.observe(el);
+    this._far.observe(el);
+  }
+
+  /** Release the scene and its context; it starts again when it comes near. */
+  sleep() {
+    this.el.classList.remove('is-live');
+    this.running = false;
+    this._teardown();
+    this.started = false;
+    this._near.observe(this.el);
+  }
+
+  /** Stop or resume self-running motion (the scene still follows scroll and params). */
+  setStill(still) {
+    this.reducedMotion = still;
+    this.api?.setStill?.(still);
+    this.needsRender = true;
+    this._sync();
+  }
+
+  // When the loop is not running (motion stopped, reduced motion, lab stills)
+  // a change still has to reach the screen: draw one frame on the next tick.
+  _invalidate() {
+    this.needsRender = true;
+    if (this.running || !this.api || this._queued) return;
+    this._queued = true;
+    requestAnimationFrame(() => {
+      this._queued = false;
+      if (!this.running && this.needsRender) this._render(this.fixedTime ?? performance.now() / 1000, 0);
+    });
   }
 
   setProgress(p) {
     const v = Math.min(1, Math.max(0, p));
     if (v !== this.progress) {
       this.progress = v;
-      this.needsRender = true;
+      this._invalidate();
     }
   }
 
@@ -131,15 +168,14 @@ export class SceneHost {
    */
   setFrame(rect) {
     this.frame = rect;
-    this.needsRender = true;
+    this._invalidate();
   }
 
   /** Free-form values a scene understands (for example which dish is selected). */
   setParam(key, value) {
     if (this.params[key] !== value) {
       this.params[key] = value;
-      this.needsRender = true;
-      if (this.api && !this.running && this.visible) this._render(this.fixedTime ?? 0, 0);
+      this._invalidate();
     }
   }
 
@@ -147,7 +183,7 @@ export class SceneHost {
   addSpin(delta) {
     this.spin.angle += delta;
     this.spin.velocity = delta * 60;
-    this.needsRender = true;
+    this._invalidate();
   }
 
   async start() {
@@ -184,6 +220,11 @@ export class SceneHost {
         reducedMotion: this.reducedMotion,
         size,
       });
+      if (!this.started) {
+        // Put to sleep while the scene was still loading: let go of it again.
+        this._teardown();
+        return;
+      }
       this.api.resize?.(size.w, size.h);
       this.el.appendChild(canvas);
 
@@ -253,6 +294,15 @@ export class SceneHost {
 
   _render(time, dt) {
     if (!this.api || !this.renderer) return;
+    // With motion stopped the clock stands still, so nothing drifts between
+    // frames that are drawn only because the visitor scrolled.
+    if (this.fixedTime == null && this.reducedMotion) {
+      if (this._frozen == null) this._frozen = time;
+      time = this._frozen;
+      dt = 0;
+    } else {
+      this._frozen = null;
+    }
     const p = this.pointer;
     const k = dt ? 1 - Math.exp(-dt * 6) : 1;
     p.x += (p.tx - p.x) * k;
@@ -329,6 +379,7 @@ export class SceneHost {
   destroy() {
     this._near.disconnect();
     this._onscreen.disconnect();
+    this._far.disconnect();
     this._teardown();
   }
 }

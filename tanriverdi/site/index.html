@@ -45,6 +45,8 @@
       d.classList.add('js');
       d.classList.add(gl ? 'gl' : 'no-gl');
       if (gl && !reduced) d.classList.add('kaydir');
+      // The first-screen text is revealed by the page script; never leave it hidden.
+      setTimeout(function () { d.classList.add('hazir'); }, 3000);
     })();
   </script>
   <script type="module" src="/src/main.js"></script>
@@ -76,7 +78,7 @@
 
   <main id="icerik">
 
-    <!-- 1. SAHNE: the İ of TANRIVERDİ is the döner. Scrolling grows it into the scene. -->
+    <!-- 1. SAHNE: the döner stands in the headline between the name and 48; scrolling grows it into the scene. -->
     <section class="sahne" id="sahne" aria-labelledby="sahne-baslik">
       <div class="sahne__kat">
         <div class="sahne__isik" aria-hidden="true"></div>
@@ -88,8 +90,7 @@
           <p class="ustyazi"><span>Muğla</span><span>1988'den beri</span><span>7 gün 24 saat açık</span></p>
           <h1 class="kilit" id="sahne-baslik">
             <span class="gorunmez">Tanrıverdi 48 Restaurant</span>
-            <span class="kilit__satir" aria-hidden="true"><span class="kilit__harfler">TANRI</span></span>
-            <span class="kilit__satir" aria-hidden="true"><span class="kilit__harfler">VERD</span><span class="kilit__i" data-doner-yuvasi><img src="./posters/doner-harf.webp" alt="" width="220" height="440" decoding="async"></span><span class="kilit__48">48</span></span>
+            <span class="kilit__satir" aria-hidden="true"><span class="kilit__harfler">TANRIVERDİ</span><span class="kilit__i" data-doner-yuvasi><img src="./posters/doner-harf.webp" alt="" width="300" height="600" decoding="async"></span><span class="kilit__48">48</span></span>
           </h1>
           <p class="slogan">Etin lezzet ile buluştuğu adres.</p>
           <p class="sahne__metin">Döner, ızgara, pide ve lahmacun. 1988'den beri aynı kalite ve özenle.</p>
@@ -98,6 +99,7 @@
             <a class="dugme dugme--cizgi" href="./menu.html">Menü</a>
           </div>
         </div>
+        <img class="sahne__on-afis" src="./posters/doner-harf.webp" alt="" width="300" height="600" decoding="async" aria-hidden="true">
 
         <div class="sahne__perde" aria-hidden="true">
           <span class="dev">DÖNER</span>
@@ -113,12 +115,13 @@
           </figure>
         </div>
 
-        <p class="ipucu" aria-hidden="true"><span class="ipucu__nokta"></span>Kaydır: döner büyür, bıçak iner</p>
+        <p class="ipucu" aria-hidden="true"><span class="ipucu__nokta"></span>Kaydır: ocak yanar, bıçak iner</p>
+        <button class="hareket hareket--sahne" type="button" data-hareket aria-pressed="false">Hareketi durdur</button>
       </div>
     </section>
 
     <!-- 2. TABELA: the words on the street sign -->
-    <div class="tabela" aria-label="Dış tabelamızda yazanlar: döner, ızgara, pide, lahmacun">
+    <div class="tabela" role="img" aria-label="Döner, ızgara, pide, lahmacun, taş fırın, 7/24">
       <div class="tabela__kayan" aria-hidden="true">
         <span>DÖNER</span><i></i><span>IZGARA</span><i></i><span>PİDE</span><i></i><span>LAHMACUN</span><i></i><span>TAŞ FIRIN</span><i></i><span>7/24</span><i></i>
         <span>DÖNER</span><i></i><span>IZGARA</span><i></i><span>PİDE</span><i></i><span>LAHMACUN</span><i></i><span>TAŞ FIRIN</span><i></i><span>7/24</span><i></i>
@@ -161,7 +164,7 @@
         <div class="sar lezzet__ic">
           <header class="lezzet__ust">
             <p class="etiket">Lezzetler</p>
-            <h2 class="baslik baslik--orta" id="lezzet-baslik">Tabelamızda <em>ne yazıyorsa.</em></h2>
+            <h2 class="baslik baslik--orta" id="lezzet-baslik">Ateşten <em>sofraya.</em></h2>
           </header>
           <div class="lezzet__sekmeler" role="tablist" aria-label="Lezzetler">
             <button role="tab" id="sekme-0" aria-controls="pano-0" aria-selected="true" data-indeks="0"><b>01</b>Döner</button>

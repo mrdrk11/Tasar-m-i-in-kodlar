@@ -73,19 +73,30 @@ function cubuk() {
   window.addEventListener('scroll', guncelle, { passive: true });
 }
 
+// "Hareketi durdur": stops everything that moves by itself (the 3D idle
+// motion and the pulsing hint). Scroll-driven changes still follow the scroll.
 function hareketDugmesi() {
-  const btn = $('[data-hareket]');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
+  const dugmeler = $$('[data-hareket]');
+  const sistem = window.matchMedia('(prefers-reduced-motion: reduce)');
+  dugmeler.forEach((btn) => btn.addEventListener('click', () => {
     const durdu = !html.classList.contains('duruk');
     html.classList.toggle('duruk', durdu);
-    btn.setAttribute('aria-pressed', String(durdu));
-    btn.textContent = durdu ? 'Hareketi başlat' : 'Hareketi durdur';
-    Object.values(hosts).forEach((h) => {
-      h.reducedMotion = durdu || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (h.api) h.needsRender = true;
-      h._sync();
+    dugmeler.forEach((b) => {
+      b.setAttribute('aria-pressed', String(durdu));
+      b.textContent = durdu ? 'Hareketi başlat' : 'Hareketi durdur';
     });
+    Object.values(hosts).forEach((h) => h.setStill(durdu || sistem.matches));
+  }));
+}
+
+// The sign strip drifts sideways as the page scrolls past it.
+function tabela() {
+  const kayan = $('.tabela__kayan');
+  if (!kayan || !KAYDIR) return;
+  gsap.fromTo(kayan, { xPercent: -4 }, {
+    xPercent: -34,
+    ease: 'none',
+    scrollTrigger: { trigger: '.tabela', start: 'top bottom', end: 'bottom top', scrub: 0.4 },
   });
 }
 
@@ -155,21 +166,40 @@ function sahne() {
 
   if (!KAYDIR) return;
 
-  // Where the döner sits: first in the İ slot of the headline, later on its stage.
+  // Where the döner stands: first in the headline (wide screens) or beside
+  // the text (phones), later on its stage.
   const yuva = { x: 0.6, y: 0.3, w: 0.1, h: 0.4 };
   const sahneKutusu = { x: 0, y: 0, w: 1, h: 1 };
   const kare = { x: 0, y: 0, w: 1, h: 1 };
+  const ofset = (el) => {
+    // Layout offsets ignore transforms, so this works at any scroll position.
+    let x = 0, y = 0;
+    while (el && el !== kat) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
+    return { x, y };
+  };
   const olc = () => {
     const W = kat.clientWidth, H = kat.clientHeight;
     if (!W || !H) return;
-    // Layout offsets ignore transforms, so the slot can be measured at any scroll position.
-    let x = 0, y = 0, el = slot;
-    while (el && el !== kat) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; }
-    const w = slot.offsetWidth, h = slot.offsetHeight;
-    const full = h * 1.29; // cap height plus the dot of the İ
-    yuva.x = x / W; yuva.w = w / W;
-    yuva.y = (y + h - full) / H; yuva.h = full / H;
     const genis = W >= 900;
+    if (genis && slot.offsetWidth) {
+      // The slot is as tall as a capital letter; the döner is 1.25em tall and
+      // dips 0.22em below the baseline (same numbers as the CSS placeholder).
+      const em = parseFloat(getComputedStyle(slot).fontSize);
+      const { x, y } = ofset(slot);
+      const w = slot.offsetWidth, h = slot.offsetHeight;
+      const full = 1.25 * em, dip = 0.22 * em;
+      yuva.x = x / W; yuva.w = w / W;
+      yuva.y = (y + h + dip - full) / H; yuva.h = full / H;
+    } else {
+      // Phones: right-hand column under the name, down to just above the hint.
+      const ad = $('.kilit', kat);
+      const top = ofset(ad).y + ad.offsetHeight + 10;
+      const bottom = H * 0.91;
+      const w = W * 0.42;
+      const h = Math.min(bottom - top, w / 0.5);
+      yuva.x = (W * 0.98 - w) / W; yuva.w = w / W;
+      yuva.y = (bottom - h) / H; yuva.h = h / H;
+    }
     Object.assign(sahneKutusu, genis ? { x: 0.43, y: 0.035, w: 0.57, h: 0.94 } : { x: 0, y: 0.31, w: 1, h: 0.62 });
   };
 
@@ -219,18 +249,10 @@ function sahne() {
 function acilis() {
   const kat = $('.sahne__kat');
   if (!kat) return;
-  const parcalar = ['.ustyazi', '.kilit__satir:nth-of-type(2) .kilit__harfler', '.kilit__satir:nth-of-type(3) .kilit__harfler', '.kilit__48', '.slogan', '.sahne__metin', '.sahne__giris .dugmeler']
-    .map((s) => $(s, kat)).filter(Boolean);
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const baslat = () => {
-    html.classList.add('hazir');
-    if (reduced) return;
-    gsap.from(parcalar, {
-      autoAlpha: 0, y: 34, duration: 0.9, ease: 'expo.out', stagger: 0.07, clearProps: 'transform,opacity,visibility',
-    });
-  };
+  // The entrance itself is a CSS animation (see bolumler.css) so it never
+  // fights the scroll timeline over inline styles; this only gives the signal.
   const fontlar = document.fonts?.ready ?? Promise.resolve();
-  Promise.race([fontlar, new Promise((r) => setTimeout(r, 1400))]).then(baslat);
+  Promise.race([fontlar, new Promise((r) => setTimeout(r, 1400))]).then(() => html.classList.add('hazir'));
 }
 
 /* ------------------------------------------------------------------------ */
@@ -346,6 +368,7 @@ export function baslat() {
   yillar();
   cubuk();
   hareketDugmesi();
+  tabela();
   sahneleriKur();
   sahne();
   acilis();

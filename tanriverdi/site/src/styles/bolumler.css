@@ -88,7 +88,7 @@
 /* 1. Sahne (hero)                                                          */
 /* ----------------------------------------------------------------------- */
 
-.sahne { position: relative; background: var(--is); }
+.sahne { position: relative; background: #06150d; }
 .sahne__kat {
   position: relative;
   display: grid;
@@ -100,8 +100,9 @@
 .sahne__isik {
   position: absolute; inset: 0;
   background:
-    radial-gradient(60% 55% at 72% 58%, rgba(212, 56, 10, 0.34), rgba(212, 56, 10, 0) 70%),
-    radial-gradient(40% 40% at 18% 12%, rgba(38, 97, 29, 0.28), rgba(38, 97, 29, 0) 70%);
+    radial-gradient(58% 60% at 74% 60%, rgba(226, 74, 14, 0.5), rgba(160, 40, 8, 0.16) 55%, rgba(160, 40, 8, 0) 76%),
+    radial-gradient(70% 60% at 10% 0%, rgba(46, 132, 60, 0.42), rgba(38, 97, 29, 0) 70%),
+    linear-gradient(180deg, #0a2416 0%, #06150d 55%, #0b0907 100%);
   pointer-events: none;
 }
 .sahne__giris {
@@ -112,6 +113,17 @@
   align-items: flex-start;
   gap: clamp(12px, 2svh, 22px);
 }
+
+/* Entrance: the first-screen text waits for the fonts (class "hazir" from
+   sayfa.js, with a timed fallback in index.html), then rises in order. */
+html.js:not(.hazir) .sahne__giris > * { opacity: 0; }
+html.hazir .sahne__giris > * { animation: gir 900ms var(--cikis) backwards; }
+html.hazir .sahne__giris > :nth-child(2) { animation-delay: 70ms; }
+html.hazir .sahne__giris > :nth-child(3) { animation-delay: 160ms; }
+html.hazir .sahne__giris > :nth-child(4) { animation-delay: 230ms; }
+html.hazir .sahne__giris > :nth-child(5) { animation-delay: 300ms; }
+@keyframes gir { from { opacity: 0; transform: translateY(30px); } }
+@media (prefers-reduced-motion: reduce) { html.hazir .sahne__giris > * { animation: none; } }
 
 .ustyazi {
   display: flex;
@@ -133,45 +145,32 @@
   transform: rotate(45deg) translateY(-0.05em);
 }
 
-/* The lockup: TANRI / VERD + the döner standing in for the İ. */
+/* The lockup: the name on one line, then the döner, then 48.
+   4.35em is the measured width of TANRIVERDİ in this face at this stretch. */
 .kilit {
-  font-size: min(31.5vw, 21svh);
+  font-size: min(calc((100vw - 2 * var(--kenar)) / 5.02), 20svh);
   font-weight: 900;
   font-stretch: 62%;
-  line-height: 0.86;
+  line-height: 0.9;
   letter-spacing: -0.012em;
   text-transform: uppercase;
   color: var(--krem);
 }
 .kilit__satir { display: block; white-space: nowrap; }
 .kilit__harfler { display: inline-block; }
-.kilit__i {
-  position: relative;
-  display: inline-block;
-  width: 0.4425em;
-  height: 0.686em;          /* cap height of the typeface; the dot rises above */
-  margin-inline: 0.015em 0.03em;
-}
-.kilit__i img {
-  position: absolute;
-  left: 0; bottom: 0;
-  width: 100%;
-  height: 129%;             /* cap height + the dot of the İ */
-  max-width: none;
-  object-fit: contain;
-  object-position: center bottom;
-}
+.kilit__i { display: none; }
 .kilit__48 {
   position: relative;
-  top: -1.12em;
+  top: -1.16em;
   display: inline-block;
-  margin-left: 0.3em;
+  margin-left: 0.36em;
   font-size: 0.31em;
   font-stretch: 125%;
   letter-spacing: 0;
   line-height: 1;
   color: var(--altin);
 }
+.sahne__on-afis { display: none; }
 
 .sahne__metin {
   max-width: 30rem;
@@ -199,11 +198,11 @@
 
 @media (min-width: 900px) {
   .sahne__kat {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
     align-items: center;
     column-gap: 40px;
   }
-  .kilit { font-size: min(17.5vw, 29svh); }
+  .kilit { font-size: min(calc((62vw - 2 * var(--kenar)) / 5.02), 24svh); }
   .sahne__gl { grid-row: span 2; width: min(100%, 620px); }
 }
 
@@ -235,8 +234,37 @@ html.kaydir .sahne__giris {
   bottom: 9svh;
   justify-content: center;
 }
-/* The canvas draws the döner in the slot once it is live; until then the poster shows. */
+/* Phones: the döner stands tall on the right of the first screen and the
+   text keeps to the left of it. */
+html.kaydir .sahne__giris > :not(.kilit):not(.ustyazi) { max-width: 54%; }
+html.kaydir .sahne__giris .dugmeler { flex-direction: column; align-items: stretch; width: 54%; }
+html.kaydir .sahne__giris .dugme { white-space: normal; text-align: center; padding-inline: 1em; }
+html.kaydir .sahne__on-afis {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  right: 2%;
+  bottom: 9svh;
+  width: 42%;
+  height: auto;
+  max-height: 60svh;
+  object-fit: contain;
+  transition: opacity 400ms ease;
+}
+/* Once the canvas is live it draws the döner; the still images step aside. */
+html.kaydir .sahne__kat.canli .sahne__on-afis,
 html.kaydir .sahne__kat.canli .kilit__i img { opacity: 0; }
+html.kaydir .sahne__gl .gl__afis { display: none; }
+.hareket--sahne { display: none; }
+html.kaydir .hareket--sahne {
+  position: absolute;
+  z-index: 4;
+  right: var(--kenar);
+  bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  display: none;
+  background: rgba(20, 18, 16, 0.7);
+  color: var(--krem);
+}
 html.kaydir .sahne__perde {
   position: absolute;
   inset: 0;
@@ -297,7 +325,33 @@ html.kaydir .ipucu {
 }
 
 @media (min-width: 900px) {
-  html.kaydir .sahne__giris { right: auto; width: min(64vw, 900px); }
+  /* Wide screens: name, döner and 48 share one line; the döner is taller than the letters. */
+  html.kaydir .kilit { font-size: min(calc((100vw - 2 * var(--kenar)) / 5.86), 30svh); margin-block: 0.16em 0.1em; }
+  html.kaydir .kilit__i {
+    position: relative;
+    display: inline-block;
+    width: 0.625em;
+    height: 0.686em;          /* cap height of the typeface */
+    margin-inline: 0.05em 0;
+  }
+  html.kaydir .kilit__i img {
+    position: absolute;
+    left: 0;
+    bottom: -0.22em;
+    width: 100%;
+    height: 1.25em;
+    max-width: none;
+    object-fit: contain;
+    object-position: center bottom;
+    transition: opacity 400ms ease;
+  }
+  html.kaydir .kilit__48 { margin-left: 0.3em; }
+  html.kaydir .sahne__on-afis { display: none; }
+  html.kaydir .sahne__giris > :not(.kilit):not(.ustyazi) { max-width: 34rem; }
+  html.kaydir .sahne__giris .dugmeler { flex-direction: row; align-items: center; width: auto; }
+  html.kaydir .sahne__giris .dugme { white-space: nowrap; padding-inline: 1.5em; }
+  html.kaydir .hareket--sahne { display: inline-flex; align-items: center; }
+  html.kaydir .sahne__giris { right: auto; width: min(100%, calc(100vw - 2 * var(--kenar))); }
   html.kaydir .sahne__doner {
     right: auto;
     top: 0;
@@ -326,7 +380,7 @@ html.kaydir .ipucu {
   gap: clamp(18px, 3vw, 34px);
   width: max-content;
   padding-block: clamp(12px, 1.8vw, 20px);
-  animation: kay 36s linear infinite;
+  will-change: transform;
 }
 .tabela__kayan span {
   font-size: clamp(1.7rem, 1rem + 3.4vw, 3.4rem);
@@ -344,12 +398,9 @@ html.kaydir .ipucu {
   background: var(--biber);
   transform: rotate(45deg);
 }
-/* The row is written out twice; sliding by exactly half loops seamlessly. */
-@keyframes kay { to { transform: translateX(calc(-50% - clamp(9px, 1.5vw, 17px))); } }
-html.duruk .tabela__kayan, html.duruk .ipucu__nokta { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) {
-  .tabela__kayan, .ipucu__nokta { animation: none; }
-}
+/* The strip does not run by itself: it drifts with the scroll (see sayfa.js). */
+html.duruk .ipucu__nokta { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .ipucu__nokta { animation: none; } }
 
 /* ----------------------------------------------------------------------- */
 /* 3. 1988                                                                  */
