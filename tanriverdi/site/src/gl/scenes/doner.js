@@ -4,8 +4,12 @@
 //
 // state.progress 0 → 1 drives the camera and the slicing; state.spin adds the
 // visitor's drag rotation; state.pointer gives a small parallax.
+// state.params.stage 0 → 1: at 0 only the spit with its meat and the tomato
+// on top are shown, upright and straight on, so the döner can stand in for
+// the letter İ in the headline; at 1 the burner, tray and embers are there.
+// state.frame places the döner inside a part of the canvas.
 import {
-  fitCameraBox, makeEnvironment, Embers, contactShadow, canvasTexture, radialTexture,
+  fitCameraBox, applyFrame, makeEnvironment, Embers, contactShadow, canvasTexture, radialTexture,
   disposeTree, fbm3, noise3, rng, sat, lerp, range, smooth, damp, tier, GLSL_NOISE,
 } from '../kit.js';
 
@@ -202,7 +206,6 @@ export default function create({ THREE, renderer, quality, size, reducedMotion }
   const camera = new THREE.PerspectiveCamera(30, size.w / size.h, 0.1, 100);
   const center = new THREE.Vector3(-0.22, 1.7, -0.25);
   const camDir = new THREE.Vector3();
-  let aspect = size.w / size.h;
 
   const env = makeEnvironment(renderer, {
     top: 0x2b1c12,
@@ -428,14 +431,29 @@ export default function create({ THREE, renderer, quality, size, reducedMotion }
     return out.set(Math.sin(KNIFE_ANGLE) * r, BASE_Y + yv * HEIGHT, Math.cos(KNIFE_ANGLE) * r);
   };
 
-  function update({ time, dt, progress: p, pointer, spin }) {
+  const LETTER = { center: new THREE.Vector3(0, 1.875, 0), width: 1.46, height: 2.93, depth: 1.4 };
+  const STAGE = { center, width: 2.9, height: 3.75, depth: 2.2 };
+  const boxCenter = new THREE.Vector3();
+
+  function update({ time, dt, progress: p, pointer, spin, params, frame, size: canvas }) {
     const t = reducedMotion ? 0 : time;
+    const stage = smooth(sat(params.stage ?? 1));
     spit.rotation.y = t * 0.24 + spin + p * 1.4;
+
+    // Everything around the spit arrives as the letter grows into the scene.
+    rig.visible = stage > 0.002;
+    rig.scale.setScalar(0.6 + 0.4 * stage);
+    rig.position.y = (1 - stage) * -0.9;
+    embers.material.uniforms.uIntensity.value = stage;
+    embers.points.visible = stage > 0.02;
+    // The tomato is the dot of the İ: a little larger while the döner is a letter.
+    const dot = lerp(1.35, 1, stage);
+    tomato.scale.set(dot, dot * 0.84, dot);
 
     tileMat.uniforms.uTime.value = t;
     const flick = 0.92 + 0.06 * Math.sin(t * 7.3) + 0.04 * Math.sin(t * 19.1 + 1.7);
-    heat.intensity = 34 * flick;
-    halo.material.opacity = 0.85 + 0.15 * flick;
+    heat.intensity = 34 * flick * stage;
+    halo.material.opacity = (0.85 + 0.15 * flick) * stage;
     embers.update(t, renderer);
 
     // Knife: comes in from the upper right, its edge travels down the cone
@@ -486,8 +504,8 @@ export default function create({ THREE, renderer, quality, size, reducedMotion }
     shavings.instanceMatrix.needsUpdate = true;
 
     // Camera: slow orbit and push-in with scroll, a little parallax from the pointer.
-    const tOrbit = lerp(-0.2, 0.42, smooth(p, 0, 1)) + pointer.x * 0.1;
-    const tElev = lerp(0.1, 0.2, smooth(p, 0.1, 0.8)) - pointer.y * 0.05;
+    const tOrbit = (lerp(-0.2, 0.42, smooth(p, 0, 1)) + pointer.x * 0.1) * stage;
+    const tElev = (lerp(0.1, 0.2, smooth(p, 0.1, 0.8)) - pointer.y * 0.05) * stage + (1 - stage) * 0.02;
     const tRadius = lerp(1.0, 0.9, smooth(p, 0.12, 0.62)) + smooth(p, 0.82, 1) * 0.06; // zoom factor
     if (first || !dt) {
       orbit = tOrbit; elev = tElev; radius = tRadius; first = false;
@@ -497,16 +515,24 @@ export default function create({ THREE, renderer, quality, size, reducedMotion }
       radius = damp(radius, tRadius, 5, dt);
     }
     camDir.set(Math.sin(orbit) * Math.cos(elev), Math.sin(elev), Math.cos(orbit) * Math.cos(elev));
-    fitCameraBox(camera, { center, width: 2.9, height: 3.75, depth: 2.2, aspect, margin: 1.03 * radius, dir: camDir });
+    const a = applyFrame(camera, frame, canvas);
+    boxCenter.copy(LETTER.center).lerp(STAGE.center, stage);
+    fitCameraBox(camera, {
+      center: boxCenter,
+      width: lerp(LETTER.width, STAGE.width, stage),
+      height: lerp(LETTER.height, STAGE.height, stage),
+      depth: lerp(LETTER.depth, STAGE.depth, stage),
+      aspect: a,
+      margin: lerp(1.0, 1.03 * radius, stage),
+      dir: camDir,
+    });
   }
 
   return {
     scene,
     camera,
     update,
-    resize(w, h) {
-      aspect = w / h;
-    },
+    resize() {},
     dispose() {
       embers.dispose();
       disposeTree(scene);

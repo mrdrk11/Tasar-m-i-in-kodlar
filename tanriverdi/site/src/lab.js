@@ -7,12 +7,13 @@
 //   bg     page background behind the transparent canvas (hex without #)
 //   px,py  pointer position, -1..1
 //   spin   drag rotation in radians
+//   frame  x,y,w,h as fractions of the canvas: where the subject should sit
 //   any other key is passed to the scene as a param (numbers are parsed), e.g. &index=2
 import { SceneHost } from './gl/host.js';
 
 const q = new URLSearchParams(location.search);
 const name = q.get('scene') || 'doner';
-if (q.get('bg')) document.body.style.setProperty('--bg', '#' + q.get('bg'));
+if (q.get('bg')) document.body.style.setProperty('--bg', q.get('bg') === 'none' ? 'transparent' : '#' + q.get('bg'));
 const scenes = import.meta.glob('./gl/scenes/*.js');
 const load = scenes[`./gl/scenes/${name}.js`];
 const el = document.getElementById('stage');
@@ -34,7 +35,11 @@ if (!load) {
     host.pointer.y = host.pointer.ty = y;
   }
   if (q.has('spin')) host.spin.angle = parseFloat(q.get('spin'));
-  const known = new Set(['scene', 'p', 't', 'q', 'bg', 'px', 'py', 'spin', 'reduced']);
+  if (q.has('frame')) {
+    const [x, y, w, h] = q.get('frame').split(',').map(Number);
+    host.setFrame({ x, y, w, h });
+  }
+  const known = new Set(['scene', 'p', 't', 'q', 'bg', 'px', 'py', 'spin', 'reduced', 'frame']);
   for (const [k, v] of q) if (!known.has(k)) host.params[k] = Number.isNaN(Number(v)) ? v : Number(v);
   el.addEventListener('scene:live', () => { window.__ready = true; });
   window.addEventListener('pointermove', (e) => {

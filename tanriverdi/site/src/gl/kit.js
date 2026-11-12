@@ -122,6 +122,22 @@ export function fitCameraBox(camera, { center, width, height, depth = 0, aspect,
   return dist;
 }
 
+/**
+ * Draw the subject inside a part of the canvas. `frame` is { x, y, w, h } as
+ * fractions of the canvas (origin top left) or null for the whole canvas;
+ * `size` is the canvas size in CSS pixels. Call it before fitCamera /
+ * fitCameraBox and pass the returned aspect ratio to them.
+ */
+export function applyFrame(camera, frame, size) {
+  if (!frame) {
+    if (camera.view) camera.clearViewOffset();
+    return size.w / size.h;
+  }
+  const fw = Math.max(1, frame.w * size.w), fh = Math.max(1, frame.h * size.h);
+  camera.setViewOffset(fw, fh, -frame.x * size.w, -frame.y * size.h, size.w, size.h);
+  return fw / fh;
+}
+
 /* ----------------------------------------------------------------------- */
 /* Environment (reflections without any downloaded HDRI)                    */
 /* ----------------------------------------------------------------------- */

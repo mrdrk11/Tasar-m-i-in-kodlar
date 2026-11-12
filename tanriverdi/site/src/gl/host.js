@@ -83,6 +83,7 @@ export class SceneHost {
     this.pointer = { x: 0, y: 0, tx: 0, ty: 0 };
     this.spin = { angle: 0, velocity: 0 };
     this.params = { ...(opts.params || {}) };
+    this.frame = null;
     this.visible = false;
     this.running = false;
     this.started = false;
@@ -121,6 +122,16 @@ export class SceneHost {
   setPointer(x, y) {
     this.pointer.tx = x;
     this.pointer.ty = y;
+  }
+
+  /**
+   * Ask the scene to draw its subject inside part of the canvas instead of
+   * filling it. `rect` is { x, y, w, h } as fractions of the canvas (origin
+   * top left), or null for the whole canvas.
+   */
+  setFrame(rect) {
+    this.frame = rect;
+    this.needsRender = true;
   }
 
   /** Free-form values a scene understands (for example which dish is selected). */
@@ -211,7 +222,7 @@ export class SceneHost {
 
   _resize() {
     if (!this.renderer || !this.api) return;
-    const { w, h } = this._size();
+    const { w, h } = (this._cssSize = this._size());
     this.renderer.setPixelRatio(this._pixelRatio());
     this.renderer.setSize(w, h, false);
     this.api.resize?.(w, h);
@@ -257,6 +268,8 @@ export class SceneHost {
       pointer: p,
       spin: this.spin.angle,
       params: this.params,
+      frame: this.frame,
+      size: this._cssSize || (this._cssSize = this._size()),
       visible: this.visible,
     });
     if (this.api.render) this.api.render(this.renderer);

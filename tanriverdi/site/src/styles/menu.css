@@ -1,0 +1,36 @@
+/* Placeholder menu page: holds the address the Menu buttons point to. */
+.menu-sayfa {
+  --ikincil: var(--kul);
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: 40px var(--kenar) calc(40px + env(safe-area-inset-bottom, 0px));
+  overflow: clip;
+  background:
+    radial-gradient(60% 50% at 50% 100%, rgba(212, 56, 10, 0.32), rgba(212, 56, 10, 0) 70%),
+    radial-gradient(40% 40% at 14% 10%, rgba(38, 97, 29, 0.3), rgba(38, 97, 29, 0) 70%),
+    var(--is);
+  text-align: center;
+}
+.menu-sayfa__ic { display: grid; justify-items: center; gap: clamp(14px, 2.4vw, 24px); max-width: 44rem; }
+.menu-sayfa__logo { width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 0 3px var(--altin), 0 0 60px -6px rgba(255, 106, 31, 0.6); }
+.menu-sayfa h1 {
+  font-size: clamp(4.4rem, 1rem + 20vw, 13rem);
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 0.82;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+}
+.menu-sayfa .govde { max-width: 30rem; }
+.menu-sayfa__sozler {
+  font-size: clamp(1.05rem, 0.9rem + 1vw, 1.5rem);
+  font-weight: 800;
+  font-stretch: 80%;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--altin);
+}
+.menu-sayfa .dugmeler { justify-content: center; }
+.menu-sayfa__geri { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-weight: 700; text-underline-offset: 4px; }

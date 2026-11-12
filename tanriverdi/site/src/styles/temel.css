@@ -1,0 +1,280 @@
+/* Tanrıverdi 48 Restaurant — foundations: tokens, reset, type, buttons, shared parts. */
+
+:root {
+  /* Colours: every one comes from the logo, the sign or the interior. */
+  --is: #0b0907;        /* soot: page ground */
+  --komur: #141413;     /* logo black */
+  --kor: #2a0d06;       /* deep ember */
+  --koz: #ff6a1f;       /* ember orange */
+  --altin: #ffac06;     /* logo gold */
+  --alev: #fbd46b;      /* logo flame yellow */
+  --biber: #c8241a;     /* pul biber red */
+  --yesil: #26611d;     /* logo green */
+  --fayans: #0c2418;    /* tile green, deep */
+  --maydanoz: #57a639;  /* parsley */
+  --lavas: #fff3d6;     /* lavash cream */
+  --krem: #fff3dc;      /* text on dark */
+  --kul: #cbbcaa;       /* secondary text on dark */
+  --tugla: #6a3515;     /* logo brick */
+
+  --yazi: 'Archivo Variable', 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --el: 'Fraunces Variable', 'Fraunces', Georgia, 'Times New Roman', serif;
+
+  /* Motion: strong ease-out for anything entering, in-out for things that move on screen. */
+  --cikis: cubic-bezier(0.23, 1, 0.32, 1);
+  --gecis: cubic-bezier(0.77, 0, 0.175, 1);
+
+  --kenar: clamp(18px, 4.4vw, 56px);  /* page side padding */
+  --ust-yukseklik: 68px;
+  --cubuk-yukseklik: 0px;             /* phone action bar height when shown */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--ust-yukseklik) + 8px);
+  background: var(--is);
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--is);
+  color: var(--krem);
+  font-family: var(--yazi);
+  font-size: 1.0625rem;
+  font-weight: 440;
+  font-stretch: 100%;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img, picture, canvas, svg { display: block; max-width: 100%; }
+img { height: auto; }
+h1, h2, h3, p, figure, dl, dd, ol, ul { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+
+::selection { background: var(--altin); color: var(--komur); }
+
+:focus-visible {
+  outline: 3px solid var(--alev);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.gorunmez {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.atla {
+  position: fixed;
+  top: 10px; left: 10px;
+  z-index: 100;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--altin);
+  color: var(--komur);
+  font-weight: 750;
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform 200ms var(--cikis);
+}
+.atla:focus-visible { transform: translateY(0); }
+
+.sar {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: var(--kenar);
+}
+
+/* ----------------------------------------------------------------------- */
+/* Type                                                                     */
+/* ----------------------------------------------------------------------- */
+
+.baslik {
+  font-weight: 850;
+  font-stretch: 78%;
+  font-size: clamp(2.35rem, 1.2rem + 5.2vw, 5.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+.baslik--orta { font-size: clamp(1.9rem, 1.1rem + 3.4vw, 3.9rem); }
+.baslik--dev { font-size: clamp(2.6rem, 1.2rem + 6.4vw, 6.6rem); }
+
+/* The second voice: soft, slightly wonky serif italic, always in the accent colour. */
+.baslik em, .slogan {
+  font-family: var(--el);
+  font-style: italic;
+  font-weight: 560;
+  font-stretch: 100%;
+  font-variation-settings: 'SOFT' 100, 'WONK' 1;
+  letter-spacing: -0.012em;
+  color: var(--vurgu, var(--altin));
+}
+.baslik em { display: inline-block; padding-right: 0.04em; }
+
+.slogan {
+  font-size: clamp(1.45rem, 1rem + 2.1vw, 2.6rem);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.govde {
+  max-width: 34rem;
+  font-size: clamp(1.02rem, 0.95rem + 0.4vw, 1.22rem);
+  color: var(--ikincil, var(--kul));
+  text-wrap: pretty;
+}
+
+.etiket {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 0.78rem;
+  font-weight: 760;
+  font-stretch: 118%;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--vurgu, var(--altin));
+}
+.etiket::before {
+  content: '';
+  width: 0.62em; height: 0.62em;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+.etiket--koyu { color: var(--komur); }
+
+/* Giant poster words that sit behind the 3D. */
+.dev {
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------------- */
+/* Buttons                                                                  */
+/* ----------------------------------------------------------------------- */
+
+.dugmeler { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.dugme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  min-height: 52px;
+  padding: 0.82em 1.5em;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 760;
+  font-stretch: 106%;
+  letter-spacing: 0.005em;
+  line-height: 1.1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 140ms var(--cikis), background-color 200ms ease, color 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+.dugme:active { transform: scale(0.97); }
+.dugme--kucuk { min-height: 44px; padding: 0.6em 1.15em; font-size: 0.94rem; }
+
+.dugme--altin { background: var(--altin); color: var(--komur); box-shadow: 0 10px 30px -12px rgba(255, 172, 6, 0.75); }
+.dugme--cizgi { border-color: rgba(255, 243, 220, 0.5); color: var(--krem); }
+.dugme--dolgu { background: var(--on, var(--krem)); color: var(--zemin, var(--komur)); }
+.dugme--koyu { background: var(--komur); color: var(--altin); }
+.dugme--koyu-cizgi { border-color: var(--komur); color: var(--komur); }
+
+@media (hover: hover) and (pointer: fine) {
+  .dugme--altin:hover { background: var(--alev); }
+  .dugme--cizgi:hover { border-color: var(--krem); background: rgba(255, 243, 220, 0.1); }
+  .dugme--dolgu:hover { box-shadow: 0 0 0 4px color-mix(in srgb, var(--on, var(--krem)) 28%, transparent); }
+  .dugme--koyu:hover { background: #000; color: var(--alev); }
+  .dugme--koyu-cizgi:hover { background: var(--komur); color: var(--altin); }
+}
+
+/* ----------------------------------------------------------------------- */
+/* 3D hosts and their posters                                               */
+/* ----------------------------------------------------------------------- */
+
+.gl { position: relative; }
+.gl--kare { aspect-ratio: 1; }
+.gl-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms var(--cikis);
+}
+.gl.is-live .gl-canvas { opacity: 1; }
+.gl__afis {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: contain;
+  transition: opacity 500ms ease;
+}
+.gl.is-live .gl__afis { opacity: 0; }
+
+/* ----------------------------------------------------------------------- */
+/* Photo prints: small on purpose, the source photographs are small.        */
+/* ----------------------------------------------------------------------- */
+
+.baski {
+  --genislik: clamp(128px, 15vw, 190px);
+  width: var(--genislik);
+  padding: 7px 7px 0;
+  background: var(--lavas);
+  color: var(--komur);
+  box-shadow: 0 22px 40px -18px rgba(0, 0, 0, 0.7), 0 2px 0 rgba(0, 0, 0, 0.14);
+  transform: rotate(var(--egim, 0deg));
+}
+.baski img { width: 100%; aspect-ratio: var(--oran, 335 / 597); object-fit: cover; }
+.baski figcaption {
+  padding: 7px 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 760;
+  font-stretch: 112%;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+}
+.baski--egik-sol { --egim: -4deg; }
+.baski--egik-sag { --egim: 3.5deg; }
+
+/* ----------------------------------------------------------------------- */
+/* Reveal on scroll (set by JS; content is visible without it)              */
+/* ----------------------------------------------------------------------- */
+
+.js [data-gir] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 700ms var(--cikis), transform 800ms var(--cikis);
+  transition-delay: calc(var(--sira, 0) * 70ms);
+}
+.js [data-gir].gorundu { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js [data-gir] { opacity: 1; transform: none; transition: none; }
+}
