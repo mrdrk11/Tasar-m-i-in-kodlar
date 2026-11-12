@@ -13,6 +13,8 @@ const ts = opt('t', '2').split(',').map(Number);
 const mobile = has('mobile');
 const w = +opt('w', mobile ? 390 : 1280), h = +opt('h', mobile ? 844 : 800);
 const port = opt('port', '5173'), q = opt('q', mobile ? 'mid' : 'high'), bg = opt('bg', '0d1a10');
+// --extra "index=0;index=1" renders one frame set per semicolon-separated query fragment
+const extras = opt('extra', '').split(';');
 
 const browser = await launch();
 const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, isMobile: mobile, hasTouch: mobile });
@@ -23,12 +25,12 @@ page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
 
 const frames = [];
 let stats = null;
-for (const t of ts) for (const p of ps) {
-  await page.goto(`http://127.0.0.1:${port}/lab.html?scene=${scene}&p=${p}&t=${t}&q=${q}&bg=${bg}`, { waitUntil: 'load' });
+for (const extra of extras) for (const t of ts) for (const p of ps) {
+  await page.goto(`http://127.0.0.1:${port}/lab.html?scene=${scene}&p=${p}&t=${t}&q=${q}&bg=${bg}${extra ? '&' + extra : ''}`, { waitUntil: 'load' });
   await page.waitForFunction(() => window.__ready === true, null, { timeout: 60000 }).catch(() => errors.push(`timeout waiting for scene at p=${p} t=${t}`));
   await page.waitForTimeout(250);
   stats = await page.evaluate(() => window.__lab?.stats?.() ?? null);
-  frames.push({ p, t, png: await page.screenshot() });
+  frames.push({ p, t, extra, png: await page.screenshot() });
 }
 await browser.close();
 
@@ -38,7 +40,7 @@ const cols = Math.min(frames.length, mobile ? 4 : 2);
 const scale = mobile ? 1 : 0.5;
 const tw = Math.round(w * scale), th = Math.round(h * scale);
 const html = `<body style="margin:0;background:#222;display:grid;grid-template-columns:repeat(${cols},${tw}px);gap:6px;padding:6px;width:max-content;font:12px monospace;color:#fff">` +
-  frames.map((f) => `<figure style="margin:0"><img width="${tw}" height="${th}" src="data:image/png;base64,${f.png.toString('base64')}"><figcaption>p=${f.p} t=${f.t}</figcaption></figure>`).join('') + '</body>';
+  frames.map((f) => `<figure style="margin:0"><img width="${tw}" height="${th}" src="data:image/png;base64,${f.png.toString('base64')}"><figcaption>p=${f.p} t=${f.t} ${f.extra}</figcaption></figure>`).join('') + '</body>';
 const pg = await b2.newPage({ viewport: { width: cols * (tw + 6) + 6, height: 600 } });
 await pg.setContent(html);
 await pg.screenshot({ path: out, fullPage: true });
