@@ -2,25 +2,32 @@
 
 Derleme tarihi: 12 Kasım 2026
 
-Güvenilirlik sırası: (1) işletme tarafından verilen bilgi, (2) logo dosyası,
-(3) internetteki kayıtlar. İnternet kayıtları arama sonuçlarının özetlerinden
+Güvenilirlik sırası: (1) işletme tarafından verilen bilgi ve gönderilen
+görseller (logo, fotoğraflar, Instagram profilinin ekran görüntüsü),
+(2) internetteki kayıtlar. İnternet kayıtları arama sonuçlarının özetlerinden
 alındı; sayfaların kendisi açılamadı. Instagram ve Yemeksepeti otomatik
-ziyaretçiye içerik göstermedi. "Doğrulanacak" yazan her şey siteye konmadan
-önce işletmeye sorulmalı.
+ziyaretçiye içerik göstermedi; Instagram bilgileri gönderilen ekran
+görüntüsünden okundu. "Doğrulanacak" yazan her şey siteye konmadan önce
+işletmeye sorulmalı.
 
 ## 1. İşletme
 
 | Alan | Bilgi | Durum |
 |---|---|---|
-| Ad (logoda) | TANRIVERDİ 48 RESTAURANT | Kesin (logo) |
+| Ad (logoda ve dış tabelada) | TANRIVERDİ 48 RESTAURANT | Kesin (logo, tabela fotoğrafı) |
+| Ad (Instagram'da) | Tanrıverdi Restaurant | Kesin (profil ekran görüntüsü) |
+| Ad (iç mekân tabelasında) | TANRIVERDİ 48 TAŞFIRIN | Kesin (fotoğraf) |
 | Eski / listelerdeki ad | Tanrıverdi Küp3 Çorba Dünyası Döner & Kebab; Tanrıverdi Küp 3; Tanrıverdi Lokantası Küp 3 | Bir yorum "eski adı Küp3, yeni adı Tanrıverdi 48" diyor |
+| Kuruluş | 1988 ("1988'den beri aynı kalite ve özenle") | Kesin (Instagram biyografisi) |
+| Slogan | "Etin lezzet ile buluştuğu adres" | Kesin (Instagram biyografisi) |
 | Telefon | 0552 213 53 33 | Kesin (işletme tarafı) |
+| WhatsApp sipariş hattı | https://api.whatsapp.com/send/?phone=905522135333 | Kesin (Instagram biyografisi) |
 | Çalışma saatleri | 7 gün 24 saat | Kesin (işletme tarafı) |
+| Dış tabeladaki ürün yazısı | "…ER - IZGARA - PİDE - LAHMACUN - Pİ…" (baş ve son kısmı fotoğrafta kesik) | Kesin (tabela fotoğrafı); tam metin doğrulanacak |
 | Adres | Muslihittin Mah., Atatürk Bulvarı 31/B, Sıla İş Merkezi, Menteşe / Muğla | Doğrulanacak (bir kayıt "No: 4", Foursquare "Şeyh Mahallesi" diyor) |
 | Konum tarifi | Yatağan yolunda, şehir çıkışında | Doğrulanacak (gezi yazısı) |
 | İkinci telefon | (0252) 212 48 22 | Doğrulanacak (tek kayıt) |
 | Tür | Dönerci, kebapçı, çorbacı; aile restoranı | Kayıtlar |
-| Tecrübe | "Muğla kebabı ve döneri, 30 yılı aşkın tecrübe" | Doğrulanacak (tek kayıt) |
 
 "48" Muğla'nın plaka kodu.
 
@@ -45,7 +52,27 @@ Logodan ölçülen renkler:
 | Alev turuncusu | `#d46c14` | Alev |
 | Alev sarısı | `#f2b72f`, `#fbd46b` | Alev |
 
-## 3. Menü (kayıtlarda geçenler)
+Logonun ikinci hali (iç mekân tabelası): aynı taş fırın biçimi, fırının içi
+lacivert, alev beyaz, şeritler krem rengi; altta "RESTAURANT" yerine
+"TAŞFIRIN" yazıyor.
+
+Mekânın görünümü (fotoğraflardan): dış cephe antrasit, kırmızı kutu vurgular,
+üstte ampul dizileri; iç duvar balıksırtı döşenmiş parlak koyu yeşil fayans
+(`#233830` civarı), küre biçimli duvar lambası, bitkiler.
+
+## 3. Fotoğraflar (işletme tarafının gönderdikleri)
+
+Hepsi küçük; sitede geniş alanda bulanık görünür. Aynı karelerin asıl
+dosyaları gerekir.
+
+| Dosya | Ne gösteriyor | Boyut |
+|---|---|---|
+| `fotograflar/dis-cephe-tabela.jpg` | Dış cephe ve ışıklı "Tanrıverdi 48 Restaurant" tabelası, mavi gökyüzü, ampul dizileri | 335 × 597 |
+| `fotograflar/ic-mekan-tasfirin-tabela.jpg` | Yeşil fayanslı duvarda "Tanrıverdi 48 Taşfırın" tabelası | 335 × 597 |
+| `fotograflar/doner-ustasi-sis-basinda.jpg` | Usta şişteki döneri bıçakla kesiyor | 399 × 501 |
+| `kaynak-goruntuler/instagram-profil.png` | Instagram profilinin ekran görüntüsü (siteye konmaz, bilgi kaynağı) | 1426 × 782 |
+
+## 4. Menü (kayıtlarda geçenler)
 
 Güncel menü işletmeden alınmalı. Aşağısı farklı kayıtlardan derlendi.
 
@@ -60,7 +87,7 @@ Güncel menü işletmeden alınmalı. Aşağısı farklı kayıtlardan derlendi.
   Et Döner menü, 2 kişilik İskender menü, 4 kişilik menüler, tavuk güveç menü,
   Adana dürüm menü, 2'li Tanrıverdi Dürüm ve Ayran menü
 
-## 4. Fiyatlar — siteye KONMAYACAK, hepsi eski ya da çelişkili
+## 5. Fiyatlar — siteye KONMAYACAK, hepsi eski ya da çelişkili
 
 | Kaynak | Örnek |
 |---|---|
@@ -68,7 +95,7 @@ Güncel menü işletmeden alınmalı. Aşağısı farklı kayıtlardan derlendi.
 | Yemeksepeti "Tanrıverdi Döner" kaydı | Tavuk döner dürüm 270 TL, mega 370 TL, 2'li dürüm ve ayran menü 580 TL |
 | Restaurant Guru | Kişi başı 400–600 TL |
 
-## 5. Puanlar ve yorumlar
+## 6. Puanlar ve yorumlar
 
 | Site | Puan | Yorum sayısı |
 |---|---|---|
@@ -86,30 +113,37 @@ telefonda söylenmeyen teslimat ücreti (Mart 2026).
 
 Yorumlar siteye ancak işletmenin onayıyla ve kaynağı belli olarak konabilir.
 
-## 6. İnternetteki hesaplar ve kayıtlar
+## 7. İnternetteki hesaplar ve kayıtlar
 
-- Instagram: https://www.instagram.com/tanriverdi_restaurant_48/ (içerik okunamadı)
+- Instagram: https://www.instagram.com/tanriverdi_restaurant_48/ — 3.596 takipçi,
+  391 takip (12 Kasım 2026 ekran görüntüsü). Öne çıkanlar: "neredeyiz",
+  "lezzet", "keyif", "misafirleri…" (adı ekranda kesik), "sizden". Gönderiler
+  okunamadı.
 - Facebook: https://www.facebook.com/tanriverdilokantasikup3/ (içerik okunamadı)
 - Yemeksepeti: "Tanrıverdi Döner" ve "Tanrıverdi Küp 3" (ikincisi kapalı görünüyor)
 - İlgili şube: Tanrıverdi Cafe & Restaurant – Küp Döner, Cumhuriyet Cad. 34/B,
   Yatağan, (0252) 572 79 79, 06:00–23:00
 
-## 7. Tasarım yönü (işletme tarafının isteği)
+## 8. Tasarım yönü (işletme tarafının isteği)
 
 - Site Tanrıverdi (Küp 3, Muğla) için.
 - Dönerci kimliği öne çıkacak; şişe sarılı büyük bir döner animasyonu olacak.
 - Logo çok görünür olacak.
 - Menü herkesin seveceği şekilde sunulacak.
 
-## 8. Eksikler
+## 9. Eksikler
 
-- Yemek ve mekân fotoğrafları
+- Yemek fotoğrafları (döner tabağı, İskender, lahmacun, pide, Muğla kebabı,
+  çorba, ekmek) ve mekânın geniş kareleri
+- Eldeki üç fotoğrafın asıl, büyük dosyaları
 - Güncel menü ve fiyat listesi
 - Kesin adres; paket servis, gel-al ve masa servisi bilgisi
 - Daha yüksek çözünürlüklü ya da şeffaf zeminli logo
-- Sitede kullanılacak ad: "Tanrıverdi 48 Restaurant" mı, "Küp 3" de geçecek mi
+- Sitede kullanılacak ad: "Tanrıverdi 48 Restaurant" mı, "Taşfırın" ya da
+  "Küp 3" de geçecek mi
+- Dış tabeladaki ürün yazısının tam metni
 
-## 9. Kaynaklar
+## 10. Kaynaklar
 
 - Tavsiyemiz: https://tavsiyemiz.com/hizmet/tanriverdi-kup3-corba-dunyasi-doner-kebab-67d0410108674
 - Tikla: https://www.tikla.com.tr/kup-3-tanriverdi-mugla.html
