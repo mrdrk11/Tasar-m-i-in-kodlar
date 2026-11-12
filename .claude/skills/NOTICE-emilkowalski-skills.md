@@ -1,17 +1,22 @@
-# Emil Kowalski design engineering skill — source and license
+# Emil Kowalski's skills — source and license
 
-The `emil-design-eng` folder in this directory is an unmodified copy of the
-main skill from Emil Kowalski's "Skills For Designers and Engineers".
+These folders in this directory are unmodified copies of all 19 skills from
+Emil Kowalski's "Skills For Designers and Engineers":
 
-- Source: https://github.com/emilkowalski/skill (`skills/emil-design-eng/`)
+`emil-design-eng`, `animate`, `animate-expo`, `animation-performance`,
+`animation-vocabulary`, `apple-design`, `ask-sonner`, `break-ui`,
+`choreograph`, `find-animation-opportunities`, `gestures`,
+`improve-animations`, `learn-taste`, `mobile-native`, `pick-ui-library`,
+`prototype`, `remove-animations`, `review-animations`, `write-swift`
+
+- Source: https://github.com/emilkowalski/skills (`skills/` folder)
 - Commit: `f7ce8c02d6e3c8f0d980a44c57bcc41a40254349` (2026-11-12)
 
-The source repository holds 18 more skills (animate, choreograph, gestures,
-review-animations, mobile-native, apple-design and others). They are not
-installed here.
+Four of them only run when called by name: `learn-taste`, `pick-ui-library`,
+`prototype`, `review-animations`.
 
-To update, replace `emil-design-eng/SKILL.md` with the newer file from the
-source repository and change the commit above.
+To update, replace the folders with the newer ones from the source
+repository and change the commit above.
 
 ## License (MIT)
 
