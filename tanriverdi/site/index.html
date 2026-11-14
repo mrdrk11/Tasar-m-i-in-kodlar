@@ -45,8 +45,14 @@
       d.classList.add('js');
       d.classList.add(gl ? 'gl' : 'no-gl');
       if (gl && !reduced) d.classList.add('kaydir');
-      // The first-screen text is revealed by the page script; never leave it hidden.
-      setTimeout(function () { d.classList.add('hazir'); }, 3000);
+      // Reveal the first-screen text as soon as its typeface is there, without
+      // waiting for the page script (which carries the 3D engine and is large).
+      function goster() { d.classList.add('hazir'); }
+      document.addEventListener('DOMContentLoaded', function () {
+        var f = document.fonts && document.fonts.load ? document.fonts.load('900 1em "Archivo Variable"', 'TANRIVERDİ') : null;
+        if (f) f.then(goster, goster);
+        setTimeout(goster, f ? 1200 : 0);
+      });
     })();
   </script>
   <script type="module" src="/src/main.js"></script>
