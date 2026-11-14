@@ -1,0 +1,44 @@
+# Tanrıverdi 48 sitesini derler ve GitHub Pages'te yayınlar.
+name: Tanrıverdi sitesini yayınla
+
+on:
+  push:
+    branches: [claude/sharp-lovelace-wkhmjd]
+    paths:
+      - 'tanriverdi/site/**'
+      - '.github/workflows/tanriverdi-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  yayinla:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tanriverdi/site/package-lock.json
+      - name: Derle
+        working-directory: tanriverdi/site
+        run: |
+          npm ci
+          npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: tanriverdi/site/dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
