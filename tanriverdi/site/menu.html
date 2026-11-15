@@ -4,31 +4,105 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Menü | Tanrıverdi 48 Restaurant</title>
-  <meta name="description" content="Tanrıverdi 48 Restaurant menüsü hazırlanıyor. Sipariş için: 0552 213 53 33.">
-  <meta name="robots" content="noindex">
+  <meta name="description" content="Tanrıverdi 48 Restaurant menüsü: döner, kebap, pide, lahmacun, çorba ve menüler. Sipariş: 0552 213 53 33.">
   <meta name="theme-color" content="#0b0907">
   <meta name="color-scheme" content="dark">
   <meta name="format-detection" content="telephone=no">
   <link rel="icon" href="./favicon.ico" sizes="48x48">
   <link rel="icon" type="image/png" sizes="192x192" href="./brand/icon-192.png">
   <link rel="apple-touch-icon" href="./brand/icon-180.png">
+  <script>document.documentElement.classList.add('js');</script>
   <script type="module" src="/src/menu.js"></script>
 </head>
-<body>
-  <main class="menu-sayfa">
-    <div class="menu-sayfa__ic">
-      <img class="menu-sayfa__logo" src="./brand/logo-447.webp" width="120" height="120" alt="Tanrıverdi 48 Restaurant logosu">
-      <p class="etiket">Tanrıverdi 48 Restaurant</p>
-      <h1>Menü</h1>
-      <p class="slogan">Hazırlanıyor.</p>
-      <p class="menu-sayfa__sozler">Döner · Izgara · Pide · Lahmacun</p>
-      <p class="govde">Menü sayfamız yakında burada olacak. O zamana kadar sipariş için bize yazın ya da arayın: 0552 213 53 33. 7 gün 24 saat açığız.</p>
-      <div class="dugmeler">
-        <a class="dugme dugme--altin" href="https://api.whatsapp.com/send/?phone=905522135333" target="_blank" rel="noopener">WhatsApp'tan sipariş ver</a>
-        <a class="dugme dugme--cizgi" href="tel:+905522135333">Hemen ara</a>
+<body class="mn">
+  <a class="atla" href="#icerik">İçeriğe geç</a>
+
+  <header class="ust" id="ust">
+    <div class="ust__ic">
+      <a class="ust__marka" href="./index.html" aria-label="Tanrıverdi 48 Restaurant, ana sayfa">
+        <img src="./brand/logo-447.webp" width="44" height="44" alt="" decoding="async">
+        <span>Tanrıverdi <b>48</b></span>
+      </a>
+      <nav class="ust__gezinti" aria-label="Site">
+        <a href="./index.html">Ana sayfa</a>
+        <a href="./index.html#tasfirin">Taş fırın</a>
+        <a href="./index.html#siparis">İletişim</a>
+      </nav>
+      <div class="ust__eylem">
+        <a class="dugme dugme--cizgi dugme--kucuk" href="tel:+905522135333">Ara</a>
+        <a class="dugme dugme--altin dugme--kucuk" href="https://api.whatsapp.com/send/?phone=905522135333" target="_blank" rel="noopener">Sipariş ver</a>
       </div>
-      <a class="menu-sayfa__geri" href="./index.html">Ana sayfaya dön</a>
     </div>
+  </header>
+
+  <main id="icerik">
+    <section class="mh">
+      <span class="mh__dev" aria-hidden="true">MENÜ</span>
+      <div class="mh__gl gl" data-mh-gl aria-hidden="true"></div>
+      <div class="sar mh__ic">
+        <p class="ustyazi"><span>Tanrıverdi 48</span><span>Muğla</span><span>7 gün 24 saat açık</span></p>
+        <h1 class="mh__baslik">Menü</h1>
+        <p class="slogan">Ateşten sofraya.</p>
+        <p class="govde">Bir yemeğe dokunun: fotoğrafı büyür, tek tuşla WhatsApp'tan sipariş verirsiniz.</p>
+      </div>
+    </section>
+
+    <nav class="mnav" aria-label="Kategoriler"><div class="mnav__ic" data-mnav></div></nav>
+
+    <div data-kategoriler></div>
+    <noscript><p class="sar" style="padding:40px 0">Menüyü görmek için tarayıcınızda JavaScript açık olmalı. Sipariş için: 0552 213 53 33.</p></noscript>
+
+    <section class="msip">
+      <div class="sar msip__ic">
+        <p class="etiket etiket--koyu">Sipariş hattı</p>
+        <a class="siparis__numara" href="tel:+905522135333">0552 213 53 33</a>
+        <p class="govde">Telefon ve WhatsApp. 7 gün 24 saat açık.</p>
+        <div class="dugmeler">
+          <a class="dugme dugme--koyu" href="https://api.whatsapp.com/send/?phone=905522135333" target="_blank" rel="noopener">WhatsApp'tan sipariş ver</a>
+          <a class="dugme dugme--koyu-cizgi" href="tel:+905522135333">Hemen ara</a>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="alt">
+    <div class="sar alt__ic">
+      <img class="alt__logo" src="./brand/logo-447.webp" srcset="./brand/logo-447.webp 447w, ./brand/logo-894.webp 894w" sizes="200px" width="200" height="200" alt="Tanrıverdi 48 Restaurant logosu" loading="lazy" decoding="async">
+      <p class="alt__ad">Tanrıverdi 48 Restaurant</p>
+      <p class="slogan slogan--alt">Etin lezzet ile buluştuğu adres.</p>
+      <nav class="alt__baglar" aria-label="Kısa yollar">
+        <a href="./index.html">Ana sayfa</a>
+        <a href="https://api.whatsapp.com/send/?phone=905522135333" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="tel:+905522135333">Telefon</a>
+        <a href="https://www.instagram.com/tanriverdi_restaurant_48/" target="_blank" rel="noopener">Instagram</a>
+        <a href="#icerik">Başa dön</a>
+      </nav>
+      <div class="alt__son">
+        <p>© <span data-bu-yil>2026</span> Tanrıverdi 48 Restaurant · Bu sitede çerez ve izleme yok.</p>
+        <button class="hareket" type="button" data-hareket aria-pressed="false">Hareketi durdur</button>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="cubuk" aria-label="Hızlı sipariş" data-cubuk>
+    <a href="tel:+905522135333">Ara</a>
+    <a class="cubuk__ana" href="https://api.whatsapp.com/send/?phone=905522135333" target="_blank" rel="noopener">WhatsApp'tan sipariş</a>
+    <a href="./index.html">Ana sayfa</a>
+  </nav>
+
+  <dialog class="detay" data-detay aria-labelledby="detay-ad">
+    <button class="detay__kapat" type="button" data-detay-kapat aria-label="Kapat">Kapat</button>
+    <div class="detay__foto" data-detay-foto></div>
+    <div class="detay__metin">
+      <p class="detay__kat" data-detay-kat></p>
+      <h2 class="detay__ad" id="detay-ad" data-detay-ad></h2>
+      <p class="detay__acik" data-detay-acik></p>
+      <p class="detay__fiyat" data-detay-fiyat></p>
+      <div class="dugmeler">
+        <a class="dugme dugme--altin" data-detay-wa href="#" target="_blank" rel="noopener">WhatsApp'tan sipariş ver</a>
+        <a class="dugme dugme--koyu-cizgi" href="tel:+905522135333">Hemen ara</a>
+      </div>
+    </div>
+  </dialog>
 </body>
 </html>

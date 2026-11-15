@@ -515,3 +515,265 @@ export function buildDurum() {
   g.add(b);
   return g;
 }
+
+/* ------------------------------------------------------------------------ */
+/* Menu page extras: bowls, plated portions, ayran                           */
+/* ------------------------------------------------------------------------ */
+
+const stripMat = () => {
+  const tex = speckle(128, 128, '#8a4318', [['#4a2110', 70, 9], ['#b86a2c', 70, 8], ['#d59a4a', 26, 5]], 41);
+  return new THREE.MeshPhysicalMaterial({ map: tex, bumpMap: tex, bumpScale: 3, roughness: 0.5, clearcoat: 0.45, clearcoatRoughness: 0.35 });
+};
+
+/** A loose pile of thin döner shavings centred on the origin. */
+function meatPile(count, radius, height, seed = 3) {
+  const g = new THREE.Group();
+  const r = rng(seed);
+  const mat = stripMat();
+  const geo = new THREE.BoxGeometry(0.25, 0.014, 0.055, 6, 1, 2);
+  const p = geo.attributes.position;
+  for (let i = 0; i < p.count; i++) p.setY(i, p.getY(i) + Math.sin(p.getX(i) * 16) * 0.012);
+  geo.computeVertexNormals();
+  for (let i = 0; i < count; i++) {
+    const a = r() * 6.283, d = Math.sqrt(r()) * radius;
+    const m = new THREE.Mesh(geo, mat);
+    m.position.set(Math.cos(a) * d, 0.02 + (1 - d / radius) * height * (0.4 + r() * 0.6), Math.sin(a) * d);
+    m.rotation.set((r() - 0.5) * 0.7, r() * 6.283, (r() - 0.5) * 0.7);
+    m.scale.setScalar(0.75 + r() * 0.6);
+    g.add(m);
+  }
+  return g;
+}
+
+function tomatoHalf() {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(0.11, 24, 14, 0, Math.PI * 2, 0, Math.PI / 2), glossy(FOOD.tomato, { roughness: 0.25 }));
+  m.scale.y = 0.8;
+  return m;
+}
+
+/**
+ * A bowl with something in it.
+ * kind: 'corba' | 'ezme' | 'salata' | 'kemalpasa' | 'guvec'
+ */
+export function buildKase(kind = 'corba') {
+  const g = new THREE.Group();
+  const clay = kind === 'guvec';
+  const R = clay ? 0.6 : 0.56, H = clay ? 0.26 : 0.3;
+  const prof = [[0, 0], [R * 0.52, 0], [R * 0.6, 0.02], [R * 0.9, H * 0.6], [R, H], [R * 0.96, H + 0.012], [R * 0.86, H * 0.62], [R * 0.56, 0.05], [0, 0.05]]
+    .map(([x, y]) => new THREE.Vector2(x, y));
+  const bowlMat = clay
+    ? new THREE.MeshPhysicalMaterial({ color: 0x9a4a26, roughness: 0.55, clearcoat: 0.35, clearcoatRoughness: 0.4 })
+    : glossy(FOOD.ceramic, { roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.08 });
+  g.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 72), bowlMat));
+  if (!clay) {
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(R * 0.985, 0.007, 8, 96), new THREE.MeshStandardMaterial({ color: FOOD.brass, metalness: 1, roughness: 0.25 }));
+    rim.rotation.x = Math.PI / 2;
+    rim.position.y = H + 0.008;
+    g.add(rim);
+  }
+  const level = H * 0.78, fillR = R * 0.9;
+  const surface = (tex, extra = {}) => {
+    const m = new THREE.Mesh(new THREE.CircleGeometry(fillR, 64), new THREE.MeshPhysicalMaterial({ map: tex, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.12, ...extra }));
+    m.rotation.x = -Math.PI / 2;
+    m.position.y = level;
+    g.add(m);
+    return m;
+  };
+  const r = rng(kind.length * 7 + 3);
+  if (kind === 'corba') {
+    surface(speckle(256, 256, '#b9642a', [['#d98a3a', 60, 22], ['#8e3f18', 50, 12], ['#e8b25a', 40, 9], ['#c22a16', 26, 7], ['#2f8a2a', 30, 4]], 9));
+    const chunks = meatChunk(4);
+    const mat = stripMat();
+    for (let i = 0; i < 6; i++) {
+      const m = new THREE.Mesh(chunks, mat);
+      const a = r() * 6.283, d = Math.sqrt(r()) * fillR * 0.6;
+      m.position.set(Math.cos(a) * d, level - 0.02, Math.sin(a) * d);
+      m.rotation.set(r() * 3, r() * 3, r() * 3);
+      m.scale.setScalar(0.55 + r() * 0.3);
+      g.add(m);
+    }
+    const leaf = parsley(5);
+    leaf.position.set(0.05, level + 0.01, -0.04);
+    leaf.scale.setScalar(1.2);
+    g.add(leaf);
+  } else if (kind === 'ezme') {
+    const tex = speckle(256, 256, '#a8200f', [['#d8341c', 90, 12], ['#6e1408', 70, 9], ['#2f8a2a', 60, 5], ['#f0c24a', 26, 3], ['#f3e6c8', 30, 3]], 13);
+    surface(tex, { bumpMap: tex, bumpScale: 6, roughness: 0.4, clearcoat: 0.6 });
+    const leaf = parsley(8);
+    leaf.position.set(0, level + 0.01, 0);
+    leaf.scale.setScalar(1.3);
+    g.add(leaf);
+  } else if (kind === 'kemalpasa') {
+    surface(speckle(128, 128, '#c8862a', [['#e2a544', 40, 16], ['#a9661a', 30, 12]], 21), { roughness: 0.08, clearcoat: 1, clearcoatRoughness: 0.03 });
+    const ballMat = new THREE.MeshPhysicalMaterial({ color: 0xc27a2a, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.08 });
+    const nutMat = new THREE.MeshStandardMaterial({ color: 0x7fb23a, roughness: 0.7 });
+    [[0, 0], [0.21, 0.07], [-0.2, 0.1], [0.04, -0.22], [-0.14, -0.14], [0.17, -0.16], [-0.02, 0.23]].forEach(([x, z], i) => {
+      const b = new THREE.Mesh(new THREE.SphereGeometry(0.105, 24, 16), ballMat);
+      b.position.set(x, level + 0.03, z);
+      b.scale.y = 0.82;
+      g.add(b);
+      for (let k = 0; k < 5; k++) {
+        const n = new THREE.Mesh(new THREE.SphereGeometry(0.012, 6, 5), nutMat);
+        const a = r() * 6.283, d = r() * 0.05;
+        n.position.set(x + Math.cos(a) * d, level + 0.115 - d * 0.3, z + Math.sin(a) * d);
+        g.add(n);
+      }
+      if (i > 6) return;
+    });
+  } else if (kind === 'salata') {
+    const mats = [0x4f9a2c, 0x7dbb3c, 0x2f7a22, FOOD.tomato, 0xf3ecd8, 0x6a2a6a].map((c, i) => (i === 3 ? glossy(c) : new THREE.MeshStandardMaterial({ color: c, roughness: 0.6 })));
+    const leafGeo = new THREE.SphereGeometry(0.09, 10, 6);
+    const cubeGeo = new THREE.BoxGeometry(0.06, 0.06, 0.06);
+    for (let i = 0; i < 80; i++) {
+      const k = r();
+      const mi = k < 0.6 ? Math.floor(r() * 3) : k < 0.82 ? 3 : k < 0.93 ? 4 : 5;
+      const m = new THREE.Mesh(mi < 3 ? leafGeo : cubeGeo, mats[mi]);
+      const a = r() * 6.283, d = Math.sqrt(r()) * fillR * 0.86;
+      m.position.set(Math.cos(a) * d, level - 0.03 + (1 - d / fillR) * 0.16 * r() + 0.03, Math.sin(a) * d);
+      m.rotation.set(r() * 3, r() * 3, r() * 3);
+      if (mi < 3) m.scale.set(1, 0.16, 0.7 + r() * 0.6);
+      g.add(m);
+    }
+  } else {
+    // güveç: chunks of meat in their own juice
+    surface(speckle(128, 128, '#5a2a10', [['#7e3f18', 50, 14], ['#3a1808', 40, 10], ['#b8641f', 20, 6]], 31), { roughness: 0.15 });
+    const chunks = meatChunk(9);
+    const mat = stripMat();
+    for (let i = 0; i < 22; i++) {
+      const m = new THREE.Mesh(chunks, mat);
+      const a = r() * 6.283, d = Math.sqrt(r()) * fillR * 0.74;
+      m.position.set(Math.cos(a) * d, level + 0.01 + (1 - d / fillR) * 0.09 * r(), Math.sin(a) * d);
+      m.rotation.set(r() * 3, r() * 3, r() * 3);
+      m.scale.setScalar(0.75 + r() * 0.45);
+      g.add(m);
+    }
+    const pep = longPepper(FOOD.pepper, 0.3);
+    pep.rotation.set(Math.PI / 2, 0, 0.6);
+    pep.position.set(0.1, level + 0.12, 0.05);
+    g.add(pep);
+    const tom = tomatoHalf();
+    tom.position.set(-0.22, level + 0.03, 0.12);
+    g.add(tom);
+  }
+  g.userData.top = H;
+  return g;
+}
+
+/** Ayran in a hammered copper cup, foam on top. */
+export function buildAyran() {
+  const g = new THREE.Group();
+  const tex = speckle(128, 128, '#b9683a', [['#d98a52', 120, 7], ['#8a4420', 120, 7]], 51, { repeat: [3, 2] });
+  const copper = new THREE.MeshPhysicalMaterial({ map: tex, bumpMap: tex, bumpScale: 2.5, color: 0xffd2b0, metalness: 0.45, roughness: 0.34, clearcoat: 0.6, clearcoatRoughness: 0.2, side: THREE.DoubleSide });
+  const prof = [[0, 0], [0.2, 0], [0.22, 0.02], [0.255, 0.5], [0.275, 0.56], [0.262, 0.565], [0.235, 0.5], [0.2, 0.04], [0, 0.04]].map(([x, y]) => new THREE.Vector2(x, y));
+  g.add(new THREE.Mesh(new THREE.LatheGeometry(prof, 64), copper));
+  const foamMat = new THREE.MeshPhysicalMaterial({ color: 0xfffdf6, roughness: 0.55, clearcoat: 0.3 });
+  const top = new THREE.Mesh(new THREE.SphereGeometry(0.245, 32, 12, 0, Math.PI * 2, 0, Math.PI / 2), foamMat);
+  top.scale.y = 0.3;
+  top.position.y = 0.53;
+  g.add(top);
+  const r = rng(6);
+  for (let i = 0; i < 26; i++) {
+    const b = new THREE.Mesh(new THREE.SphereGeometry(0.022 + r() * 0.03, 10, 8), foamMat);
+    const a = r() * 6.283, d = Math.sqrt(r()) * 0.2;
+    b.position.set(Math.cos(a) * d, 0.565 + (1 - d / 0.2) * 0.05, Math.sin(a) * d);
+    g.add(b);
+  }
+  return g;
+}
+
+/**
+ * A plated portion on its plate.
+ * kind: 'iskender' | 'pilav' | 'adana'
+ */
+export function buildPorsiyon(kind = 'iskender') {
+  const g = new THREE.Group();
+  const plate = buildPlate(0.88);
+  g.add(plate);
+  const y0 = plate.userData.top;
+  const r = rng(kind.length * 5 + 1);
+  const pepper = () => { const p = longPepper(FOOD.pepper, 0.34); p.rotation.set(Math.PI / 2, 0, 0); return p; };
+  if (kind === 'iskender') {
+    const breadMat = new THREE.MeshStandardMaterial({ map: speckle(64, 64, '#ecd29a', [['#c98e3e', 30, 6]], 3), roughness: 0.8 });
+    for (let i = 0; i < 22; i++) {
+      const b = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.05, 0.13), breadMat);
+      const a = r() * 6.283, d = Math.sqrt(r()) * 0.42;
+      b.position.set(Math.cos(a) * d - 0.06, y0 + 0.03, Math.sin(a) * d);
+      b.rotation.y = r() * 3;
+      g.add(b);
+    }
+    const pile = meatPile(90, 0.42, 0.2, 5);
+    pile.position.set(-0.06, y0 + 0.05, 0);
+    g.add(pile);
+    const sauce = glossy(0xc4301a, { roughness: 0.18, clearcoat: 1 });
+    for (let i = 0; i < 12; i++) {
+      const s = new THREE.Mesh(new THREE.SphereGeometry(0.07 + r() * 0.06, 14, 10), sauce);
+      const a = r() * 6.283, d = Math.sqrt(r()) * 0.3;
+      s.position.set(Math.cos(a) * d - 0.06, y0 + 0.2 - d * 0.25, Math.sin(a) * d);
+      s.scale.y = 0.22;
+      g.add(s);
+    }
+    const yog = new THREE.Mesh(new THREE.SphereGeometry(0.17, 24, 16), new THREE.MeshPhysicalMaterial({ color: 0xfffdf4, roughness: 0.35, clearcoat: 0.5 }));
+    yog.scale.y = 0.5;
+    yog.position.set(0.5, y0 + 0.06, 0.2);
+    g.add(yog);
+    const p = pepper();
+    p.position.set(0.44, y0 + 0.07, -0.24);
+    p.rotation.z = 0.5;
+    g.add(p);
+    const t = tomatoHalf();
+    t.position.set(0.3, y0 + 0.02, 0.5);
+    g.add(t);
+  } else if (kind === 'pilav') {
+    const riceTex = speckle(256, 256, '#f6f0df', [['#ffffff', 500, 2.4], ['#e4dcc4', 300, 2.2], ['#d8b46a', 40, 2]], 19);
+    const rice = new THREE.Mesh(new THREE.SphereGeometry(0.5, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ map: riceTex, bumpMap: riceTex, bumpScale: 5, roughness: 0.75 }));
+    rice.scale.set(1.05, 0.34, 0.95);
+    rice.position.set(0, y0, 0);
+    g.add(rice);
+    const pile = meatPile(80, 0.36, 0.12, 8);
+    pile.position.set(-0.04, y0 + 0.13, 0.04);
+    g.add(pile);
+    const p = pepper();
+    p.position.set(0.52, y0 + 0.07, -0.1);
+    p.rotation.z = 1.2;
+    g.add(p);
+    const t = tomatoHalf();
+    t.position.set(0.42, y0 + 0.02, 0.4);
+    g.add(t);
+  } else {
+    // Adana: two long hand-minced kebabs on lavash
+    const lav = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.014, 48), new THREE.MeshStandardMaterial({ map: speckle(256, 256, '#f0ddb4', [['rgba(170,105,45,0.45)', 80, 12], ['rgba(110,60,20,0.4)', 40, 6]], 17), roughness: 0.8 }));
+    lav.position.y = y0 + 0.012;
+    lav.scale.z = 0.8;
+    g.add(lav);
+    const tex = speckle(256, 64, '#7a2c14', [['#4a1608', 120, 6], ['#a8401c', 120, 6], ['#1c0a04', 40, 4], ['#c8341c', 40, 3]], 27);
+    const mat = new THREE.MeshPhysicalMaterial({ map: tex, bumpMap: tex, bumpScale: 5, roughness: 0.5, clearcoat: 0.5, clearcoatRoughness: 0.3 });
+    for (const [z, rot] of [[-0.13, 0.06], [0.13, -0.05]]) {
+      const geo = new THREE.CapsuleGeometry(0.075, 0.95, 8, 28, 40);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const yy = pos.getY(i);
+        const k = 1 + Math.sin(yy * 26) * 0.07 + noise3(pos.getX(i) * 12, yy * 6, pos.getZ(i) * 12 + z * 9) * 0.08;
+        pos.setXYZ(i, pos.getX(i) * k, yy, pos.getZ(i) * k);
+      }
+      geo.computeVertexNormals();
+      const kebab = new THREE.Mesh(geo, mat);
+      kebab.rotation.set(0, rot, Math.PI / 2);
+      kebab.scale.set(0.62, 1, 1.25);
+      kebab.position.set(-0.03, y0 + 0.07, z);
+      g.add(kebab);
+    }
+    const p = pepper();
+    p.position.set(0.05, y0 + 0.07, 0.42);
+    p.rotation.z = Math.PI / 2;
+    g.add(p);
+    const t = tomatoHalf();
+    t.position.set(-0.42, y0 + 0.03, -0.4);
+    g.add(t);
+    const leaf = parsley(4);
+    leaf.position.set(0.38, y0 + 0.03, -0.4);
+    leaf.scale.setScalar(1.5);
+    g.add(leaf);
+  }
+  g.userData.top = y0;
+  return g;
+}
