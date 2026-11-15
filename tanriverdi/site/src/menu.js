@@ -1,11 +1,11 @@
-// Menu page: builds the categories and cards from menu-veri.js, runs the 3D
-// dishes, the category colours, the card tilt and the item sheet.
+// Menu page: builds the categories and cards from menu-veri.js and runs the
+// category colours, the card tilt and the item sheet. No 3D here: the food is
+// shown in real photographs.
 import '@fontsource-variable/archivo/standard.css';
 import '@fontsource-variable/fraunces/full-italic.css';
 import './styles/temel.css';
 import './styles/bolumler.css';
 import './styles/menu.css';
-import { SceneHost } from './gl/host.js';
 import { KATEGORILER, WHATSAPP } from './menu-veri.js';
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -22,6 +22,11 @@ const kok = $('[data-kategoriler]');
 const mnav = $('[data-mnav]');
 
 mnav.innerHTML = KATEGORILER.map((k) => `<a href="#kat-${k.id}" data-kat="${k.id}" style="--v:${k.renk.zemin};--vo:${k.renk.on}">${esc(k.ad)}</a>`).join('');
+
+$('[data-mh-renkler]').innerHTML = KATEGORILER.map((k, i) => `
+  <a href="#kat-${k.id}" style="--zemin:${k.renk.zemin};--on:${k.renk.on};--vurgu:${k.renk.vurgu};--sira:${i}">
+    <b>${iki(i + 1)}</b><span>${esc(k.ad)}</span><i>${k.urunler.length} çeşit</i>
+  </a>`).join('');
 
 kok.innerHTML = KATEGORILER.map((k, i) => {
   const koyu = k.renk.on !== '#141413'; // dark ground: cream cards; light ground: dark cards
@@ -43,7 +48,6 @@ kok.innerHTML = KATEGORILER.map((k, i) => {
   <section class="kat${koyu ? '' : ' kat--acik'}" id="kat-${k.id}" data-kat="${k.id}" style="--zemin:${k.renk.zemin};--on:${k.renk.on};--vurgu:${k.renk.vurgu}">
     <header class="kat__bas">
       <span class="kat__dev" aria-hidden="true">${esc(k.ad.split(' ')[0])}</span>
-      <div class="kat__gl gl" data-dish="${k.tabak}" aria-hidden="true"></div>
       <div class="sar kat__bas-ic">
         <p class="kat__no">${iki(i + 1)} <i>/ ${iki(KATEGORILER.length)}</i></p>
         <h2 class="kat__ad">${esc(k.ad)}</h2>
@@ -65,46 +69,6 @@ const kaydir = () => {
 kaydir();
 window.addEventListener('scroll', kaydir, { passive: true });
 $$('[data-bu-yil]').forEach((el) => { el.textContent = new Date().getFullYear(); });
-
-/* ---- 3D: the carousel in the hero, one turning dish per category ----------- */
-
-const hosts = [];
-const mh = $('[data-mh-gl]');
-const hero = new SceneHost(mh, () => import('./gl/scenes/lezzetler.js'), { eager: true, params: { index: 0 } });
-hosts.push(hero);
-let sira = 0, dur = reduced;
-setInterval(() => {
-  if (dur || document.hidden) return;
-  sira = (sira + 1) % 4;
-  hero.setParam('index', sira);
-}, 2600);
-
-$$('.kat__gl').forEach((el) => {
-  const host = new SceneHost(el, () => import('./gl/scenes/tabak.js'), { params: { dish: el.dataset.dish, rot: 0.4 } });
-  hosts.push(host);
-  // Drag (or swipe sideways) to turn the dish.
-  let x = null;
-  el.addEventListener('pointerdown', (e) => { x = e.clientX; el.setPointerCapture(e.pointerId); });
-  el.addEventListener('pointermove', (e) => { if (x == null) return; host.addSpin((e.clientX - x) * 0.012); x = e.clientX; });
-  const birak = () => { x = null; };
-  el.addEventListener('pointerup', birak);
-  el.addEventListener('pointercancel', birak);
-});
-if (fine) {
-  window.addEventListener('pointermove', (e) => {
-    const px = (e.clientX / window.innerWidth) * 2 - 1, py = (e.clientY / window.innerHeight) * 2 - 1;
-    hosts.forEach((h) => h.setPointer(px, py));
-  }, { passive: true });
-}
-
-const hareket = $('[data-hareket]');
-hareket?.addEventListener('click', () => {
-  dur = !dur;
-  hosts.forEach((h) => h.setStill(dur));
-  document.documentElement.classList.toggle('duruk', dur);
-  hareket.setAttribute('aria-pressed', String(dur));
-  hareket.textContent = dur ? 'Hareketi başlat' : 'Hareketi durdur';
-});
 
 /* ---- Category in view: chip state and page colour -------------------------- */
 
