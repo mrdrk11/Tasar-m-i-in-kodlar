@@ -41,6 +41,8 @@
   letter-spacing: -0.015em;
   text-transform: uppercase;
   color: var(--krem);
+  /* The dots of the Ü rise above this tight line box; keep the line above clear of them. */
+  margin-top: 0.2em;
 }
 .mh .govde { max-width: 26rem; }
 .js .mh__ic > * { animation: mgir 900ms var(--cikis) backwards; }
@@ -95,6 +97,8 @@
 @media (min-width: 600px) { .mh__renkler { grid-template-columns: repeat(4, minmax(0, 1fr)); } .mh__renkler a:last-child:nth-child(odd) { grid-column: auto; } }
 @media (min-width: 900px) {
   .mh__duzen { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: center; }
+  /* MENÜ is 2.13em wide in this face: sized to its column so it never runs under the tiles. */
+  .mh__baslik { font-size: min(14rem, calc((min(100vw, 1320px) - 2 * var(--kenar) - 48px) * 0.4 / 2.16)); }
   .mh__renkler { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .mh__renkler a { min-height: clamp(120px, 12vw, 170px); }
   .mh__renkler a:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 96px; }
