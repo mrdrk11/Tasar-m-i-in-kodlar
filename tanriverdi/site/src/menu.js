@@ -31,27 +31,27 @@ $('[data-mh-renkler]').innerHTML = KATEGORILER.map((k, i) => `
 kok.innerHTML = KATEGORILER.map((k, i) => {
   const koyu = k.renk.on !== '#141413'; // dark ground: cream cards; light ground: dark cards
   const kartlar = k.urunler.map((u, j) => `
-    <article class="kart${u.foto ? ' kart--foto' : ''}" style="--sira:${j % 4}">
+    <article class="kart" style="--sira:${j % 4}">
       <button class="kart__dugme" type="button" data-urun="${i}:${j}" aria-haspopup="dialog">
-        ${u.foto ? `<span class="kart__foto"><img src="${foto(u.foto)}" alt="${esc(u.ad)}" loading="lazy" decoding="async" width="640" height="480"></span>` : ''}
+        <span class="kart__foto${u.foto ? '' : ' kart__foto--bos'}">
+          ${u.foto ? `<img src="${foto(u.foto)}" alt="${esc(u.ad)}" loading="lazy" decoding="async" width="640" height="480">` : ''}
+          <span class="kart__fiyat">${esc(u.fiyat)}</span>
+        </span>
         <span class="kart__metin">
           <span class="kart__ad">${esc(u.ad)}</span>
           ${u.aciklama ? `<span class="kart__acik">${esc(u.aciklama)}</span>` : ''}
         </span>
-        <span class="kart__alt">
-          ${u.fiyat ? `<span class="kart__fiyat">${esc(u.fiyat)}</span>` : '<span></span>'}
-          <span class="kart__git">Sipariş</span>
-        </span>
+        <span class="kart__alt"><span class="kart__git">Sipariş ver</span></span>
       </button>
     </article>`).join('');
   return `
   <section class="kat${koyu ? '' : ' kat--acik'}" id="kat-${k.id}" data-kat="${k.id}" style="--zemin:${k.renk.zemin};--on:${k.renk.on};--vurgu:${k.renk.vurgu}">
     <header class="kat__bas">
-      <span class="kat__dev" aria-hidden="true">${esc(k.ad.split(' ')[0])}</span>
+      <span class="kat__dev" aria-hidden="true" style="--harf:${k.ad.length}">${esc(k.ad)}</span>
       <div class="sar kat__bas-ic">
         <p class="kat__no">${iki(i + 1)} <i>/ ${iki(KATEGORILER.length)}</i></p>
         <h2 class="kat__ad">${esc(k.ad)}</h2>
-        <p class="kat__soz">${esc(k.soz)}</p>
+        <p class="kat__say">${k.urunler.length} çeşit</p>
       </div>
     </header>
     <div class="sar kat__izgara">${kartlar}</div>
@@ -132,7 +132,7 @@ function doldur(i, j) {
 function ac(dugme) {
   const [i, j] = dugme.dataset.urun.split(':').map(Number);
   acan = dugme;
-  const kaynak = $('.kart__foto', dugme);
+  const kaynak = $('.kart__foto img', dugme)?.parentElement;
   const goster = () => { doldur(i, j); detay.showModal(); };
   // Where the browser can, the card's photo grows into the sheet's photo.
   if (kaynak && document.startViewTransition && !reduced) {

@@ -87,6 +87,11 @@
   .mh__renkler a:hover { transform: translateY(-6px) rotate(-1.5deg); box-shadow: 0 30px 44px -24px rgba(0, 0, 0, 0.9); }
   .mh__renkler a:nth-child(even):hover { transform: translateY(-6px) rotate(1.5deg); }
 }
+@media (max-width: 599px) {
+  .mh__renkler b { font-size: 2.5rem; top: 8px; right: 12px; }
+  .mh__renkler span { font-size: 1.12rem; }
+  .mh__renkler a { min-height: 108px; }
+}
 @media (min-width: 600px) { .mh__renkler { grid-template-columns: repeat(4, minmax(0, 1fr)); } .mh__renkler a:last-child:nth-child(odd) { grid-column: auto; } }
 @media (min-width: 900px) {
   .mh__duzen { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: center; }
@@ -182,7 +187,7 @@
   left: 50%;
   top: 6%;
   translate: -50% 0;
-  font-size: min(31vw, 46svh);
+  font-size: min(calc(190vw / var(--harf, 6)), 40svh);
   font-weight: 900;
   font-stretch: 62%;
   line-height: 0.8;
@@ -219,15 +224,7 @@
   text-transform: uppercase;
   text-wrap: balance;
 }
-.kat__soz {
-  font-family: var(--el);
-  font-style: italic;
-  font-weight: 560;
-  font-variation-settings: 'SOFT' 100, 'WONK' 1;
-  font-size: clamp(1.3rem, 1rem + 1.6vw, 2.1rem);
-  line-height: 1.1;
-  color: var(--vurgu);
-}
+.kat__say { font-size: 1rem; font-weight: 700; opacity: 0.85; }
 .js .kat__bas-ic > * { opacity: 0; transform: translateY(28px); transition: opacity 700ms var(--cikis), transform 800ms var(--cikis); }
 .js .kat__bas-ic > :nth-child(2) { transition-delay: 70ms; }
 .js .kat__bas-ic > :nth-child(3) { transition-delay: 140ms; }
@@ -240,7 +237,7 @@
 
 .kat__izgara {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
   gap: clamp(12px, 1.6vw, 20px);
   perspective: 1400px;
 }
@@ -276,18 +273,42 @@
 }
 .kart__dugme:active { transform: scale(0.98); }
 .kart__foto {
+  position: relative;
   display: block;
   aspect-ratio: 4 / 3;
   border-radius: 16px;
   overflow: hidden;
-  background: color-mix(in srgb, var(--kart-on) 10%, var(--kart));
+  background: color-mix(in srgb, var(--kart-on) 9%, var(--kart));
   transform: translateZ(26px);
 }
+/* No photograph yet: the place is kept, quietly. */
+.kart__foto--bos {
+  background:
+    repeating-linear-gradient(135deg, transparent 0 14px, color-mix(in srgb, var(--kart-on) 5%, transparent) 14px 28px),
+    color-mix(in srgb, var(--kart-on) 8%, var(--kart));
+}
 .kart__foto img { width: 100%; height: 100%; object-fit: cover; transition: transform 700ms var(--cikis); }
-.kart__metin { display: grid; gap: 4px; align-content: start; padding: 4px 8px 0; transform: translateZ(16px); }
-.kart:not(.kart--foto) .kart__metin { padding-top: 14px; }
+.kart__fiyat {
+  position: absolute;
+  left: 10px; bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--zemin);
+  color: var(--on);
+  font-size: 1.32rem;
+  font-weight: 900;
+  font-stretch: 78%;
+  letter-spacing: -0.005em;
+  box-shadow: 0 0 0 3px var(--kart), 0 10px 20px -10px rgba(0, 0, 0, 0.6);
+}
+.js .kart .kart__fiyat { transform: scale(0.5) rotate(-8deg); opacity: 0; transition: transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 240ms ease; transition-delay: calc(var(--sira, 0) * 70ms + 260ms); }
+.js .kart.gorundu .kart__fiyat { transform: none; opacity: 1; }
+.kart__metin { display: grid; gap: 5px; align-content: start; padding: 2px 8px 0; transform: translateZ(16px); }
 .kart__ad {
-  font-size: clamp(1.45rem, 1.2rem + 0.9vw, 1.9rem);
+  font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.8rem);
   font-weight: 900;
   font-stretch: 70%;
   line-height: 0.98;
@@ -296,24 +317,24 @@
   text-wrap: balance;
 }
 .kart__acik { font-size: 0.98rem; line-height: 1.4; color: var(--kart-ikincil); text-wrap: pretty; }
-.kart__alt { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 8px; transform: translateZ(16px); }
-.kart__fiyat { font-size: 1.3rem; font-weight: 900; font-stretch: 80%; }
+.kart__acik::first-letter { text-transform: uppercase; }
+.kart__alt { display: flex; justify-content: flex-end; padding: 0 8px; transform: translateZ(16px); }
 .kart__git {
   display: inline-flex;
   align-items: center;
   min-height: 38px;
   padding: 0 16px;
   border-radius: 999px;
-  background: var(--zemin);
-  color: var(--on);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--kart-on) 55%, transparent);
+  color: var(--kart-on);
   font-size: 0.88rem;
   font-weight: 760;
   transition: background-color 200ms ease, color 200ms ease;
 }
-.kat--acik .kart__git { background: var(--vurgu); color: #fff; }
 @media (hover: hover) and (pointer: fine) {
   .kart__dugme:hover { box-shadow: 0 34px 54px -26px rgba(0, 0, 0, 0.8); }
   .kart__dugme:hover .kart__foto img { transform: scale(1.06); }
+  .kart__dugme:hover .kart__git { background: var(--kart-on); color: var(--kart); }
 }
 
 /* ----------------------------------------------------------------------- */
@@ -386,6 +407,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .js .mh__ic > *, .js .mh__renkler a, .detay[open], .detay::backdrop { animation: none; }
-  .js .kart, .js .kat__bas-ic > * { opacity: 1; transform: none; transition: none; }
+  .js .kart, .js .kat__bas-ic > *, .js .kart .kart__fiyat { opacity: 1; transform: none; transition: none; }
   .kart__dugme { transition: none; }
 }
