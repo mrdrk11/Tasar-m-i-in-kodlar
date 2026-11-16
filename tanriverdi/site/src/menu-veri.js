@@ -64,23 +64,23 @@ export const KATEGORILER = [
     id: 'pizzalar', ad: 'Pizzalar',
     renk: { zemin: '#141413', on: '#fff3dc', vurgu: '#ff6a1f' },
     urunler: [
-      { ad: 'Vejeteryan Pizza', aciklama: 'Pizza sosu, pizza peyniri, mantar, domates, biber, mısır, zeytin', fiyat: '450 TL', foto: null },
-      { ad: 'Etli Special Pizza', aciklama: 'Pizza sosu, pizza peyniri, sucuk, salam, sosis', fiyat: '600 TL', foto: null },
+      { ad: 'Vejeteryan Pizza', aciklama: 'Pizza sosu, pizza peyniri, mantar, domates, biber, mısır, zeytin', fiyat: '450 TL', foto: 'vejeteryan-pizza.webp' },
+      { ad: 'Etli Special Pizza', aciklama: 'Pizza sosu, pizza peyniri, sucuk, salam, sosis', fiyat: '600 TL', foto: 'etli-special-pizza.webp' },
     ],
   },
   {
     id: 'tatlilar', ad: 'Tatlılar',
     renk: { zemin: '#7a1c4a', on: '#fff3dc', vurgu: '#fbd46b' },
     urunler: [
-      { ad: 'Fırın Sütlaç', aciklama: '1 kişilik', fiyat: '200 TL', foto: null },
+      { ad: 'Fırın Sütlaç', aciklama: '1 kişilik', fiyat: '200 TL', foto: 'firin-sutlac.webp' },
     ],
   },
   {
     id: 'icecekler', ad: 'İçecekler',
     renk: { zemin: '#0e56b8', on: '#ffffff', vurgu: '#fbd46b' },
     urunler: [
-      { ad: 'Coca-Cola (33 cl.)', aciklama: kutu, fiyat: '110 TL', foto: null },
-      { ad: 'Coca-Cola Zero Sugar (33 cl.)', aciklama: kutu, fiyat: '110 TL', foto: null },
+      { ad: 'Coca-Cola (33 cl.)', aciklama: kutu, fiyat: '110 TL', foto: 'coca-cola-33-cl.webp' },
+      { ad: 'Coca-Cola Zero Sugar (33 cl.)', aciklama: kutu, fiyat: '110 TL', foto: 'coca-cola-zero-sugar-33-cl.webp' },
       { ad: 'Fanta (33 cl.)', aciklama: kutu, fiyat: '110 TL', foto: null },
       { ad: 'Sprite (33 cl.)', aciklama: kutu, fiyat: '100 TL', foto: null },
       { ad: 'Fuse Tea (33 cl.)', aciklama: kutu, fiyat: '110 TL', foto: null },
