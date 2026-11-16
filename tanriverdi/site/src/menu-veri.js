@@ -88,9 +88,9 @@ export const KATEGORILER = [
       { ad: 'Fuse Tea (33 cl.)', aciklama: kutu, fiyat: '110 TL', foto: 'fuse-tea-33-cl.webp' },
       { ad: 'Şalgam Suyu (30 cl.)', aciklama: kutu, fiyat: '70 TL', foto: 'salgam-suyu-30-cl.webp' },
       { ad: 'Ayran (30 cl.)', aciklama: 'Büyük', fiyat: '70 TL', foto: 'ayran-30-cl.webp' },
-      { ad: 'Yayık Ayran (30 cl.)', aciklama: 'Küçük boy', fiyat: '70 TL', foto: 'yayik-ayran.webp' },
-      { ad: 'Meyveli Soda (20 cl.)', aciklama: 'Cam şişe', fiyat: '85 TL', foto: 'meyveli-soda.webp' },
-      { ad: 'Soda (20 cl.)', aciklama: 'Cam şişe', fiyat: '60 TL', foto: 'soda.webp' },
+      { ad: 'Yayık Ayran (30 cl.)', aciklama: 'Küçük boy', fiyat: '70 TL', foto: 'yayik-ayran-yeni.webp' },
+      { ad: 'Meyveli Soda (20 cl.)', aciklama: 'Cam şişe', fiyat: '85 TL', foto: 'meyveli-soda-yeni.webp' },
+      { ad: 'Soda (20 cl.)', aciklama: 'Cam şişe', fiyat: '60 TL', foto: 'soda-yeni.webp' },
     ],
   },
 ];
