@@ -57,6 +57,7 @@ export const KATEGORILER = [
       { ad: 'Tombik Ekmek Arası Et Döner', aciklama: '(65 gr.) Soğan, domates', fiyat: '400 TL', foto: 'tombik-ekmek-arasi-et-doner.webp' },
       { ad: 'Et Döner Dürüm', aciklama: '(65 gr.) Soğan, domates', fiyat: '400 TL', foto: 'et-doner-durum.webp' },
       { ad: 'Ekmek Arası Et Döner', aciklama: '(65 gr.) Soğan, domates', fiyat: '400 TL', foto: 'ekmek-arasi-et-doner.webp' },
+      { ad: '3/4 Ekmek Arası Et Döner', aciklama: '(100 gr.) Soğan, domates', fiyat: '550 TL', foto: null },
     ],
   },
   {
