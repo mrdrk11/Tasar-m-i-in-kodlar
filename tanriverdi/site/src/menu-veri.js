@@ -45,6 +45,8 @@ export const KATEGORILER = [
       { ad: 'Kavurmalı Yumurtalı Pide', aciklama: pide, fiyat: '550 TL', foto: null },
       { ad: 'Kavurmalı Pide', aciklama: pide, fiyat: '500 TL', foto: 'kavurmali-pide.webp' },
       { ad: 'Kavurmalı Kaşarlı Pide', aciklama: pide, fiyat: '550 TL', foto: 'kavurmali-kasarli-pide.webp' },
+      { ad: 'Aydın Gülü', aciklama: pide, fiyat: '160 TL', foto: null },
+      { ad: 'Taş Fırın Special', aciklama: 'Pizza sosu, pizza peyniri, sucuk, salam, sosis, domates, mantar, zeytin, mısır, biber', fiyat: '600 TL', foto: null },
     ],
   },
   {
