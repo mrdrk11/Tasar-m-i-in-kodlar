@@ -45,7 +45,7 @@ kok.innerHTML = KATEGORILER.map((k, i) => {
       </button>
     </article>`).join('');
   return `
-  <section class="kat${koyu ? '' : ' kat--acik'}" id="kat-${k.id}" data-kat="${k.id}" style="--zemin:${k.renk.zemin};--on:${k.renk.on};--vurgu:${k.renk.vurgu}">
+  <section class="kat${koyu ? '' : ' kat--acik'}${k.sigdir ? ' kat--sigdir' : ''}" id="kat-${k.id}" data-kat="${k.id}" style="--zemin:${k.renk.zemin};--on:${k.renk.on};--vurgu:${k.renk.vurgu}">
     <header class="kat__bas">
       <span class="kat__dev" aria-hidden="true" style="--harf:${k.ad.length}">${esc(k.ad)}</span>
       <div class="sar kat__bas-ic">
@@ -125,6 +125,7 @@ function doldur(i, j) {
   parca('fiyat').hidden = !u.fiyat;
   const f = parca('foto');
   f.hidden = !u.foto;
+  f.classList.toggle('detay__foto--sigdir', !!k.sigdir);
   f.innerHTML = u.foto ? `<img src="${foto(u.foto)}" alt="${esc(u.ad)}" width="960" height="720">` : '';
   parca('wa').href = `${WHATSAPP}&text=${encodeURIComponent(`Merhaba, ${u.ad} sipariş vermek istiyorum.`)}`;
 }

@@ -76,7 +76,7 @@ export const KATEGORILER = [
     ],
   },
   {
-    id: 'icecekler', ad: 'İçecekler',
+    id: 'icecekler', ad: 'İçecekler', sigdir: true, // show the whole can or bottle instead of cropping it
     renk: { zemin: '#0e56b8', on: '#ffffff', vurgu: '#fbd46b' },
     urunler: [
       { ad: 'Coca-Cola (33 cl.)', aciklama: kutu, fiyat: '110 TL', foto: 'coca-cola-33-cl.webp' },
@@ -86,9 +86,9 @@ export const KATEGORILER = [
       { ad: 'Fuse Tea (33 cl.)', aciklama: kutu, fiyat: '110 TL', foto: 'fuse-tea-33-cl.webp' },
       { ad: 'Şalgam Suyu (30 cl.)', aciklama: kutu, fiyat: '70 TL', foto: 'salgam-suyu-30-cl.webp' },
       { ad: 'Ayran (30 cl.)', aciklama: 'Büyük', fiyat: '70 TL', foto: 'ayran-30-cl.webp' },
-      { ad: 'Yayık Ayran (30 cl.)', aciklama: 'Küçük boy', fiyat: '70 TL', foto: null },
-      { ad: 'Meyveli Soda (20 cl.)', aciklama: 'Cam şişe', fiyat: '85 TL', foto: null },
-      { ad: 'Soda (20 cl.)', aciklama: 'Cam şişe', fiyat: '60 TL', foto: null },
+      { ad: 'Yayık Ayran (30 cl.)', aciklama: 'Küçük boy', fiyat: '70 TL', foto: 'yayik-ayran-30-cl.webp' },
+      { ad: 'Meyveli Soda (20 cl.)', aciklama: 'Cam şişe', fiyat: '85 TL', foto: 'meyveli-soda-20-cl.webp' },
+      { ad: 'Soda (20 cl.)', aciklama: 'Cam şişe', fiyat: '60 TL', foto: 'soda-20-cl.webp' },
     ],
   },
 ];
