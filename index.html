@@ -1,0 +1,207 @@
+<title>Londra Hukuk Planı</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Libre+Caslon+Text:wght@400;700&display=swap">
+<style>
+/* Layout: üstte ilerleme özeti, ortada hafta sekmeleri + hafta kartı, altta 7 günlük işaret tablosu */
+:root{--bg:#f2f3f7;--card:#fff;--ink:#101a33;--mute:#5b657b;--line:#dde1ea;--navy:#17284f;--onnavy:#fff;--brass:#9a7421;--tint:#fbf3df;--ok:#1d7a4b;--okbg:#e3f3ea;--warn:#a86a00;--warnbg:#fdf0d5;--bad:#b3362f;--badbg:#fbe6e4;
+--serif:'Libre Caslon Text',Georgia,serif;--sans:'Inter',system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1223;--card:#131c33;--ink:#e8ecf5;--mute:#9aa5bd;--line:#25314f;--navy:#c9a24d;--onnavy:#0b1223;--brass:#d2ab55;--tint:#2a2616;--ok:#5fcf95;--okbg:#16352a;--warn:#e5b04c;--warnbg:#3a2f13;--bad:#f08a82;--badbg:#3d1f1d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1223;--card:#131c33;--ink:#e8ecf5;--mute:#9aa5bd;--line:#25314f;--navy:#c9a24d;--onnavy:#0b1223;--brass:#d2ab55;--tint:#2a2616;--ok:#5fcf95;--okbg:#16352a;--warn:#e5b04c;--warnbg:#3a2f13;--bad:#f08a82;--badbg:#3d1f1d;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1,h2{font-family:var(--serif);margin:0;text-wrap:balance;font-weight:700}
+h1{font-size:clamp(1.5rem,5vw,2.1rem);line-height:1.15}
+h2{font-size:1.25rem}
+.sub{color:var(--mute);margin:4px 0 0;max-width:62ch}
+.top{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:flex-end}
+.start{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--mute);flex-wrap:wrap}
+input[type=date]{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.stat b{display:block;font:700 1.6rem/1.1 var(--serif);font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--ok);width:0}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.tab{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:6px 12px;font-size:13px;font-variant-numeric:tabular-nums}
+.tab[aria-selected=true]{background:var(--navy);color:var(--onnavy);border-color:var(--navy)}
+.tab.now{box-shadow:inset 0 -3px 0 var(--brass)}
+.week{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);font-weight:600}
+.wk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 24px;margin:0}
+.wk-grid div{min-width:0}
+.wk-grid dt{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}
+.wk-grid dd{margin:2px 0 0}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);font-weight:600;background:var(--bg);white-space:nowrap}
+th small{display:block;text-transform:none;letter-spacing:0;font-weight:400}
+td:first-child,th:first-child{text-align:left;position:sticky;left:0;background:var(--card);z-index:1;min-width:110px;box-shadow:1px 0 0 var(--line)}
+th:first-child{background:var(--bg)}
+td.sp{text-align:left;font-size:13px;min-width:240px}
+td.sp label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+tr.today td{background:var(--tint)}
+tr.today td:first-child{background:var(--tint)}
+tr.fut{opacity:.55}
+td b{display:block;font-size:14px}
+td span.d{font-size:12px;color:var(--mute)}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok);cursor:pointer;margin:0;flex:none}
+input[type=checkbox]:disabled{cursor:not-allowed}
+.chip{display:inline-block;min-width:44px;border-radius:99px;padding:2px 8px;font-size:12px;font-weight:600;background:var(--line);color:var(--mute)}
+.chip.g{background:var(--okbg);color:var(--ok)}.chip.w{background:var(--warnbg);color:var(--warn)}.chip.r{background:var(--badbg);color:var(--bad)}
+.all{border:1px solid var(--line);background:none;color:var(--mute);border-radius:6px;padding:2px 8px;font-size:12px;margin-left:6px}
+.note{font-size:13px;color:var(--mute);margin:0}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+summary{cursor:pointer;font:700 1.05rem var(--serif)}
+details ul{margin:10px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+a{color:var(--brass)}
+.reset{align-self:flex-start;border:1px solid var(--bad);color:var(--bad);background:none;border-radius:6px;padding:6px 12px;font-size:13px}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .3s}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="kicker">13 hafta · 91 gün · Londra LLB yolu</div>
+      <h1>Londra Hukuk Planı</h1>
+      <p class="sub">Her gün 7 küçük görev. Yaptıysan kutuyu işaretle, yapmadıysan boş bırak. Disiplin, Harvey Specter gibi avukat olmanın ilk kuralı.</p>
+    </div>
+    <label class="start" for="start">Başlangıç günü <input type="date" id="start"></label>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Haftalar"></div>
+  <section class="week" id="week"></section>
+  <div class="tw"><table id="tbl"></table></div>
+  <p class="note">Başarılı gün: en az 5/7 görev. Seri: üst üste başarılı gün sayısı. Gelecek günler kilitli, sadece bugün ve geçmiş günleri işaretleyebilirsin. Veriler bu tarayıcıda saklanır.</p>
+
+  <details>
+    <summary>Günlük 7 görev nedir?</summary>
+    <ul>
+      <li><b>Okuma, 20 dk:</b> haftanın kartındaki kaynaktan oku; bilmediğin 3 kelimeyi altını çiz.</li>
+      <li><b>Dinleme, 20 dk:</b> önce altyazılı, sonra altyazısız dinle.</li>
+      <li><b>Yazma, 15 dk:</b> kartta yazan konuda yaz; her gün 1 paragraf, hafta sonu daha uzun.</li>
+      <li><b>Konuşma, 10 dk:</b> telefona sesini kaydet, sonra dinle ve 1 hatanı düzelt.</li>
+      <li><b>Kelime, 10 yeni:</b> Anki veya Quizlet kartı yap; dünün kelimelerini tekrar et.</li>
+      <li><b>Güncel, 10 dk:</b> bugünün önemli bir haberini (dünya, hukuk, ekonomi) 3 İngilizce cümleyle not et. Genel kültürün için en iyi alışkanlık bu.</li>
+      <li><b>Özel görev:</b> gün adına göre değişir: münazara, dava okuma, essay, Suits analizi, kitap, sunum, haftalık değerlendirme.</li>
+    </ul>
+  </details>
+  <details>
+    <summary>Harvey kuralları</summary>
+    <ul>
+      <li>Hazırlanmadan hiçbir konuşmaya girme; ne istediğini ve karşı tarafın ne istediğini bil.</li>
+      <li>Bahane üretme, sonuç üret. Yapmadığın günü işaretleme, ertesi gün yap.</li>
+      <li>Önce dinle. Kaldıraç, karşı tarafı anlamaktan gelir.</li>
+      <li>Kısa ve net konuş: sonuç, sebep, örnek.</li>
+      <li>Kıyafetin, duruşun, yazın: detay güven verir. Yazılarını hatasız teslim et.</li>
+      <li>Kaybetmeyi öğren: her hatayı notla, ertesi hafta aynı hatayı yapma.</li>
+    </ul>
+  </details>
+  <details>
+    <summary>Kaynaklar ve kitaplar</summary>
+    <ul>
+      <li><a href="https://www.bbc.co.uk/learningenglish" target="_blank" rel="noopener">BBC Learning English</a>: 6 Minute English, kelime ve gramer.</li>
+      <li><a href="https://www.theguardian.com/law" target="_blank" rel="noopener">The Guardian, Law</a>: güncel hukuk haberleri.</li>
+      <li><a href="https://www.supremecourt.uk" target="_blank" rel="noopener">UK Supreme Court</a>: davalar ve duruşma videoları.</li>
+      <li><a href="https://lnat.ac.uk" target="_blank" rel="noopener">LNAT</a> ve <a href="https://www.ucas.com" target="_blank" rel="noopener">UCAS</a>: sınav ve başvuru. Üniversitelerin güncel şartlarını (LNAT, IELTS puanı, notlar) kendi sitelerinden kontrol et.</li>
+      <li>Kitaplar: Letters to a Young Lawyer (Dershowitz), Getting to Yes (Fisher, Ury), The Secret Barrister, Justice (Michael Sandel). Zor gelirse özetlerinden başla.</li>
+      <li>Suits dizisini İngilizce altyazıyla izle; sahneleri "müzakere" ve "hazırlık" gözüyle analiz et.</li>
+    </ul>
+  </details>
+  <button class="reset" id="reset">Tüm işaretleri sıfırla</button>
+</div>
+
+<script>
+const DAYS=91,K='londra-hukuk-plan-v1';
+const COLS=[['Okuma','20 dk'],['Dinleme','20 dk'],['Yazma','15 dk'],['Konuşma','10 dk'],['Kelime','10 yeni'],['Güncel','10 dk'],['Özel görev','']];
+const SPECIAL=[
+ 'Münazara: konuyu 2 dk lehte, 2 dk aleyhte konuş, kaydet.',
+ 'Dava/olay: haftanın konusundan 1 örnek oku, 5 cümlede özetle.',
+ 'Essay: 200-250 kelime argüman yaz (görüş, neden, örnek, sonuç).',
+ 'Suits veya hukuk filmi: 15 dk izle (altyazılı), 3 repliği not et.',
+ 'Kitap: 15 sayfa oku, 1 ikna/müzakere tekniği çıkar ve bugün dene.',
+ 'Sunum: haftanın konusunu 3 dk ayna karşısında veya aileye sun.',
+ 'Haftalık değerlendirme: 1-10 puan ver, 3 eksiğini yaz, gelecek hafta planını çiz.'];
+// [ad, konu, okuma, dinleme, yazma, konuşma]
+const W=[
+['Temel ve hedef','İngiliz hukuk sistemi: Common Law, mahkemeler, barrister ve solicitor farkı','BBC News: 1 kısa haber','BBC 6 Minute English (altyazılı)','Hedef günlüğü: bugün ne öğrendim (5-6 cümle)','Kendini 1 dk tanıt, kaydet, dinle'],
+['Hukuk İngilizcesi','Hukuk dalları: tort, contract, criminal, property','Guardian: 1 hukuk haberi','YouTube: Legal English videoları','Öğrendiğin 5 hukuk terimiyle kendi cümlelerin','1 hukuk terimini 1 dk sade İngilizceyle anlat'],
+['Eleştirel düşünme','Mantık hataları (logical fallacies) ve kanıt değerlendirme','Guardian Opinion: iddiayı ve kanıtı işaretle','TED-Ed: critical thinking','Yazının argümanını özetle, zayıf noktasını yaz','Bir iddiaya 3 kez "neden?" sor ve cevapla'],
+['Argüman yazma','PEEL (Point, Evidence, Explain, Link) ve IRAC yapısı','Economist Espresso: günün 5 haberi','BBC Radio 4 "Law in Action" kısa bölüm','PEEL paragrafı (5-6 cümle)','Argümanını 2 dk sesli savun'],
+['Hitabet','Ünlü konuşmalar: Churchill, Mandela, Obama','Bir konuşma metni: güçlü cümleleri işaretle','Konuşmanın videosu, shadowing','Konuşmanın 1 paragraflık analizi','Shadowing: 2 dk taklit et'],
+['Münazara','Konular: sosyal medya, okul üniforması, ölüm cezası, yapay zekâ','Aynı konuda iki zıt görüşlü yazı','Intelligence Squared debate: 10 dk','Karşı görüşün en güçlü argümanını yaz','Önce lehte, sonra aleyhte konuş'],
+['Müzakere ve ikna','Harvey tarzı müzakere: hazırlık, dinleme, kaldıraç (leverage)','Getting to Yes özeti veya 1 bölüm','Suits müzakere sahnesi (altyazılı)','Müzakere senaryosu: ben ne istiyorum, karşı taraf ne istiyor','Müzakere provası: ayna veya arkadaş'],
+['Ünlü davalar: Tort ve Contract','Donoghue v Stevenson, Carlill v Carbolic Smoke Ball','Davanın basit İngilizce özeti','Dava özeti videosu','Davayı 5 cümlede özetle: olay, soru, karar, gerekçe','Davayı 2 dk birine anlat'],
+['Ceza hukuku ve etik','R v Dudley and Stephens, adil yargılanma, masumiyet karinesi','CPS veya UK Parliament basit rehber','Michael Sandel "Justice" dersinden 10 dk','Etik ikilem: hakim olsan ne karar verirdin?','Kararını gerekçeleriyle 2 dk sun'],
+['Deneyim ve çevre','Mock trial, Model UN, okul münazara kulübü, büro gözlemi','Bir avukatın röportajı veya biyografisi','Avukat röportajı veya podcast','Kulüp veya avukata soru listesi/e-posta taslağı','Mock trial açılış konuşması yaz ve sun'],
+['Üniversite ve LNAT','UCL, KCL, LSE, Oxford: LLB şartları, LNAT, IELTS hedefi','LNAT örnek metin: 1 pasaj ve sorular','Üniversite tanıtım ve öğrenci videoları','LNAT tarzı essay: 40 dk, 1 konu','"Neden hukuk, neden Londra?" 2 dk cevap'],
+['LNAT pratik ve profil','Kişisel bildiri (personal statement) hazırlığı, okuma listesi','LNAT sample paper bölümü','Hukuk öğrencisi vlog veya podcast','Personal statement taslağı: 1 paragraf','Mülakat provası: 3 soru'],
+['Final ve portföy','3 aylık değerlendirme, portföy ve sonraki 3 ay','Önceki haftaların en zor metnini yeniden oku','İlk haftanın kaydını dinle, farkı gör','En iyi 3 yazını düzelt, portföy klasörü yap','Kendini 3 dk tanıt, 1. haftayla karşılaştır']];
+const $=id=>document.getElementById(id);
+let S={start:null,done:{}},wk=0;
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+try{const r=JSON.parse(localStorage.getItem(K));if(r&&r.start)S=r}catch(e){}
+if(!S.start)S.start=iso(new Date());
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const base=()=>{const [y,m,d]=S.start.split('-').map(Number);return new Date(y,m-1,d)};
+const dayDate=i=>{const b=base();return new Date(b.getFullYear(),b.getMonth(),b.getDate()+i)};
+const tIdx=()=>{const n=new Date();return Math.round((new Date(n.getFullYear(),n.getMonth(),n.getDate())-base())/864e5)};
+const cnt=i=>{let m=S.done[i]||0,c=0;while(m){c+=m&1;m>>=1}return c};
+const fmt=d=>d.toLocaleDateString('tr-TR',{weekday:'short',day:'numeric',month:'short'});
+const chipCls=(i,c)=>c===7?'g':i>=tIdx()?'':c>=5?'g':c>=3?'w':'r';
+
+function stats(){
+  const t=Math.min(tIdx(),DAYS-1);let tot=0,perf=0,ok=0,streak=0;
+  for(let i=0;i<=t;i++){const c=cnt(i);tot+=c;if(c===7)perf++;if(c>=5)ok++}
+  for(let i=t;i>=0;i--){if(cnt(i)>=5)streak++;else if(i!==t)break}
+  const el=Math.max(t+1,0),pct=el?Math.round(tot/(el*7)*100):0;
+  const dayLbl=tIdx()<0?'Başlamadı':tIdx()>=DAYS?'Bitti':'Gün '+(tIdx()+1)+' / '+DAYS;
+  $('stats').innerHTML=
+   '<div class="stat"><span>Bugün</span><b>'+dayLbl+'</b><div class="bar"><i style="width:'+Math.min(100,Math.max(0,(tIdx()+1)/DAYS*100))+'%;background:var(--brass)"></i></div></div>'+
+   '<div class="stat"><span>Uyum</span><b>%'+pct+'</b><div class="bar"><i style="width:'+pct+'%"></i></div></div>'+
+   '<div class="stat"><span>Seri</span><b>'+streak+' gün</b></div>'+
+   '<div class="stat"><span>Başarılı gün</span><b>'+ok+'</b></div>'+
+   '<div class="stat"><span>Kusursuz gün</span><b>'+perf+'</b></div>';
+  [...document.querySelectorAll('.tab')].forEach((b,w)=>{let s=0;for(let i=w*7;i<Math.min(DAYS,w*7+7);i++)s+=cnt(i);b.title=s+' görev tamamlandı'});
+}
+function tabs(){
+  const now=Math.floor(Math.max(0,Math.min(tIdx(),DAYS-1))/7);
+  $('tabs').innerHTML=W.map((w,i)=>'<button class="tab'+(i===now&&tIdx()>=0&&tIdx()<DAYS?' now':'')+'" role="tab" aria-selected="'+(i===wk)+'" data-w="'+i+'">Hafta '+(i+1)+'</button>').join('');
+}
+function week(){
+  const w=W[wk];let s=0;const n=Math.min(7,DAYS-wk*7);
+  for(let i=wk*7;i<wk*7+n;i++)s+=cnt(i);
+  $('week').innerHTML='<div class="kicker">Hafta '+(wk+1)+' / 13 · '+s+' / '+n*7+' görev</div><h2>'+w[0]+'</h2><p class="sub" style="margin:0">Konu: '+w[1]+'</p>'+
+   '<dl class="wk-grid"><div><dt>Okuma</dt><dd>'+w[2]+'</dd></div><div><dt>Dinleme</dt><dd>'+w[3]+'</dd></div><div><dt>Yazma</dt><dd>'+w[4]+'</dd></div><div><dt>Konuşma</dt><dd>'+w[5]+'</dd></div><div><dt>Kelime</dt><dd>Haftanın konusundan 10 yeni kelime</dd></div><div><dt>Güncel</dt><dd>Günün haberini 3 cümleyle not et</dd></div></dl>';
+}
+function row(i){
+  const t=tIdx(),m=S.done[i]||0,c=cnt(i),fut=i>t,d=dayDate(i),w=W[Math.floor(i/7)];
+  let h='<td><b>Gün '+(i+1)+'</b><span class="d">'+fmt(d)+'</span></td>';
+  for(let k=0;k<6;k++)h+='<td><input type="checkbox" data-d="'+i+'" data-k="'+k+'" aria-label="Gün '+(i+1)+' '+COLS[k][0]+'"'+(m>>k&1?' checked':'')+(fut?' disabled':'')+'></td>';
+  h+='<td class="sp"><label><input type="checkbox" data-d="'+i+'" data-k="6" aria-label="Gün '+(i+1)+' özel görev"'+(m>>6&1?' checked':'')+(fut?' disabled':'')+'><span>'+SPECIAL[i%7]+'</span></label></td>';
+  h+='<td><span class="chip '+chipCls(i,c)+'" id="c'+i+'">'+c+'/7</span>'+(fut?'':'<button class="all" data-all="'+i+'" title="Hepsini işaretle veya kaldır">Tümü</button>')+'</td>';
+  return '<tr id="r'+i+'" class="'+(i===t?'today':'')+(fut?' fut':'')+'">'+h+'</tr>';
+}
+function table(){
+  let h='<thead><tr><th>Gün</th>'+COLS.map(c=>'<th>'+c[0]+(c[1]?'<small>'+c[1]+'</small>':'')+'</th>').join('')+'<th>Durum</th></tr></thead><tbody>';
+  for(let i=wk*7;i<Math.min(DAYS,wk*7+7);i++)h+=row(i);
+  $('tbl').innerHTML=h+'</tbody>';
+}
+function all(){tabs();week();table();stats()}
+function setBit(i,k,on){S.done[i]=on?(S.done[i]||0)|1<<k:(S.done[i]||0)&~(1<<k)}
+function refresh(i){const c=cnt(i),e=$('c'+i);if(e){e.textContent=c+'/7';e.className='chip '+chipCls(i,c)}week();stats()}
+$('tbl').addEventListener('change',e=>{const t=e.target;if(t.dataset.d===undefined)return;setBit(+t.dataset.d,+t.dataset.k,t.checked);save();refresh(+t.dataset.d)});
+$('tbl').addEventListener('click',e=>{const i=e.target.dataset.all;if(i===undefined)return;const full=cnt(+i)===7;S.done[i]=full?0:127;save();document.getElementById('r'+i).outerHTML=row(+i);refresh(+i)});
+$('tabs').addEventListener('click',e=>{const w=e.target.dataset.w;if(w===undefined)return;wk=+w;all()});
+$('start').value=S.start;
+$('start').addEventListener('change',e=>{if(!e.target.value)return;S.start=e.target.value;save();wk=Math.max(0,Math.min(12,Math.floor(tIdx()/7)));all()});
+let armed=0;
+$('reset').addEventListener('click',e=>{if(!armed){armed=1;e.target.textContent='Emin misin? Tekrar tıkla';setTimeout(()=>{armed=0;e.target.textContent='Tüm işaretleri sıfırla'},4000);return}S.done={};save();armed=0;e.target.textContent='Tüm işaretleri sıfırla';all()});
+wk=Math.max(0,Math.min(12,Math.floor(tIdx()/7)));
+all();
+</script>
